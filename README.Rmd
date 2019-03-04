@@ -3,7 +3,7 @@ title: "Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model 
 output:
   github_document:
     toc: true
-    toc_depth: 3
+    toc_depth: 2
 always_allow_html: yes
 ---
 ```{r, echo=FALSE, include=TRUE, results="asis"}
@@ -41,7 +41,7 @@ This document describes the TF-IDF VSM in plain English with a real example so t
 
 This document is an R code version of the example on page 6 of this [tutorial](http://www.minerazzi.com/tutorials/term-vector-3.pdf). The example is presented without assuming any previous Maths or Natural Language Processing (NLP) knowledge.
 
-## Where can I learn more about NLP?
+# Where can I learn more about NLP?
 
 The calculations used in the code are not intended for use in a real project. For a real text mining project use one of many other popular NLP packages in R or Python. For example, [tidytext](https://github.com/juliasilge/tidytext), [quanteda](https://quanteda.io), and [scikit-learn](https://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html).
 
@@ -167,7 +167,7 @@ kable_table(joined, "Table 5: Weight word frequecies with the IDF value for each
   column_spec(8, bold = T, background = "lightgreen") %>%
   row_spec(4, bold = T, background = "lightgreen")
 ```
-### Compare query to all docs (finding the angle between vectors)
+## Compare query to all docs (finding the angle between vectors)
 
 To compensate for the effect of [document length](https://cmry.github.io/notes/euclidean-v-cosine), the standard way of quantifying the similarity between the words in the query and the words in each document is to measure the angle between the two vectors of words. This is called the [cosine of similarity](https://nlp.stanford.edu/IR-book/html/htmledition/dot-products-1.html).
 
@@ -204,7 +204,7 @@ which_document <- data.frame(document,text, query, cosine) %>%
 kable_table(which_document, "Table 7: Cosine similarity value between the query and each document") %>%
   row_spec(1, bold = T, background = "lightgreen")
 ```
-### Unit vectors for faster computation
+## Unit vectors for faster computation
 
 Typically, before calculating the cosine of the angle we [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector it into a "unit vector" (shown as columns $\hat{q}$, $\hat{d_{1}}$, $\hat{d_{2}}$, and $\hat{d_{3}}$ in green). Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate lLength by taking the square root of the sum of all squared values in each vector.
 

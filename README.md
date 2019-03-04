@@ -3,15 +3,15 @@ Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM)
 
 -   [Summary](#summary)
 -   [What is this document for?](#what-is-this-document-for)
-    -   [Where can I learn more about NLP?](#where-can-i-learn-more-about-nlp)
+-   [Where can I learn more about NLP?](#where-can-i-learn-more-about-nlp)
 -   [An example of TF-IDF VSM](#an-example-of-tf-idf-vsm)
     -   [Documents to be searched](#documents-to-be-searched)
     -   [Pre-processing the text](#pre-processing-the-text)
     -   [Create the Term-Document Matrix](#create-the-term-document-matrix)
     -   [Calculate IDF for each Word across all documents](#calculate-idf-for-each-word-across-all-documents)
     -   [Calculate the weight for each word in each document](#calculate-the-weight-for-each-word-in-each-document)
-        -   [Compare query to all docs (finding the angle between vectors)](#compare-query-to-all-docs-finding-the-angle-between-vectors)
-        -   [Unit vectors for faster computation](#unit-vectors-for-faster-computation)
+    -   [Compare query to all docs (finding the angle between vectors)](#compare-query-to-all-docs-finding-the-angle-between-vectors)
+    -   [Unit vectors for faster computation](#unit-vectors-for-faster-computation)
 -   [Beyond TF-IDF: Latent Semantic Analysis (SVD) and Word2vec](#beyond-tf-idf-latent-semantic-analysis-svd-and-word2vec)
 
 Summary
@@ -38,7 +38,7 @@ This document describes the TF-IDF VSM in plain English with a real example so t
 This document is an R code version of the example on page 6 of this [tutorial](http://www.minerazzi.com/tutorials/term-vector-3.pdf). The example is presented without assuming any previous Maths or Natural Language Processing (NLP) knowledge.
 
 Where can I learn more about NLP?
----------------------------------
+=================================
 
 The calculations used in the code are not intended for use in a real project. For a real text mining project use one of many other popular NLP packages in R or Python. For example, [tidytext](https://github.com/juliasilge/tidytext), [quanteda](https://quanteda.io), and [scikit-learn](https://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html).
 
@@ -68,7 +68,6 @@ In this example we use the search terms "gold silver truck" to find the document
 library(tidyverse)
 library(magrittr)
 library(kableExtra)
-library(formattable)
 
 words <- data.frame(d1, d2, d3) %>%
   tidyr::gather(key = "document", value = "text")
@@ -1430,7 +1429,8 @@ of
 </tr>
 </tbody>
 </table>
-### Compare query to all docs (finding the angle between vectors)
+Compare query to all docs (finding the angle between vectors)
+-------------------------------------------------------------
 
 To compensate for the effect of [document length](https://cmry.github.io/notes/euclidean-v-cosine), the standard way of quantifying the similarity between the words in the query and the words in each document is to measure the angle between the two vectors of words. This is called the [cosine of similarity](https://nlp.stanford.edu/IR-book/html/htmledition/dot-products-1.html).
 
@@ -1532,7 +1532,8 @@ gold silver truck
 </tr>
 </tbody>
 </table>
-### Unit vectors for faster computation
+Unit vectors for faster computation
+-----------------------------------
 
 Typically, before calculating the cosine of the angle we [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector it into a "unit vector" (shown as columns $\\hat{q}$, $\\hat{d\_{1}}$, $\\hat{d\_{2}}$, and $\\hat{d\_{3}}$ in green). Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate lLength by taking the square root of the sum of all squared values in each vector.
 
