@@ -1,7 +1,8 @@
 ---
 title: "Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM)"
-output:
-  github_document:
+output: 
+  html_document:
+    keep_md: true
     toc: true
     toc_depth: 2
 always_allow_html: yes
