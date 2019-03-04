@@ -1552,7 +1552,7 @@ gold silver truck
 Unit vectors for faster computation
 -----------------------------------
 
-Typically, before calculating the cosine of the angle we [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector it into a "unit vector" (shown as columns $\\hat{q}$, $\\hat{d\_{1}}$, $\\hat{d\_{2}}$, and $\\hat{d\_{3}}$ in green). Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate lLength by taking the square root of the sum of all squared values in each vector.
+Typically, before calculating the cosine of the angle we [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector it into a "unit vector" shown as columns qhat, d1hat, d2hat, d3hat. Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate lLength by taking the square root of the sum of all squared values in each vector.
 
 ``` r
 unit_vector <- function(vec) {

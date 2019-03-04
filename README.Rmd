@@ -157,7 +157,6 @@ Typically, log of base-10 is used for TF-IDF. Base-10 allows faster mental calcu
 We now search the collection of three documents with our search terms by adding the column $q$ shown in green. For each word, we multiply its $IDF_{i}$ value by the Term Frequency, which is simply the number of times the term (or word) appears in both the query and in each document. This weights the word counts (or Term Frequencies) per document and the query by the discriminatory information each word has been found to provide across all the documents globally.
 
 Look again at Table 1. We can see "silver" is rare globally among all the documents (it is only used in document 2), and "silver" is a common word locally (it is used twice in document 2). No other word is used twice in the same document. Looking at the weights calculated for "silver" (row highlighted in green) the importance of the word "silver" is reflected in the high weight calculated. Silver appears in $d_{2}$ two times, and when multiplied with its $IDF_{i}$ it has the value 0.954 shown in the column $w_{i}2$. This is the highest weight in the whole matrix.
-
 ```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
 query_seperate_words <- query %>%
   tidytext::unnest_tokens(word, text) %>%
@@ -182,9 +181,7 @@ kable_table(joined, "Table 5: Weight word frequecies with the IDF value for each
   column_spec(8, bold = T, background = "lightgreen") %>%
   row_spec(4, bold = T, background = "lightgreen")
 ```
-
 ## Compare query to all documents
-
 To compensate for the effect of [document length](https://cmry.github.io/notes/euclidean-v-cosine), the standard way of quantifying the similarity between the words in the query and the words in each document is to measure the angle between the two vectors of words. This is called the [cosine of similarity](https://nlp.stanford.edu/IR-book/html/htmledition/dot-products-1.html).
 
 To find the angle between the vectors we multiply each TF-IDF weighted word frequency in the query by the IDF weighted word frequency for each document, then sum all the values. This multiplication is also called the dot product. The dot product is the sum of the products of each component of the two vectors. 
@@ -193,7 +190,6 @@ This [example](https://www.varsitytutors.com/precalculus-help/find-the-measure-o
 That is to say, the dot product of two vectors will be equal to the cosine of the angle between the vectors, times the lengths of each of the vectors.
 
 The cosine similarity value shows that document 2 is the closest match to the search terms "`r q1`". We can understand why intuitively if we consider that document 2 contains two of the search terms ("silver" and "truck"). Also, document 2 is the only document to contain the rare word "silver". 
-
 ```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
 vector_length <- function(vec) {
   return(sqrt(sum(vec^2, na.rm = TRUE)))
@@ -220,11 +216,8 @@ which_document <- data.frame(document, text, query, cosine) %>%
 kable_table(which_document, "Table 7: Cosine similarity value between the query and each document") %>%
   row_spec(1, bold = T, background = "lightgreen")
 ```
-
 ## Unit vectors for faster computation
-
-Typically, before calculating the cosine of the angle we [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector it into a "unit vector" (shown as columns $\hat{q}$, $\hat{d_{1}}$, $\hat{d_{2}}$, and $\hat{d_{3}}$ in green). Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate lLength by taking the square root of the sum of all squared values in each vector.
-
+Typically, before calculating the cosine of the angle we [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector it into a "unit vector" shown as columns qhat, d1hat, d2hat, d3hat. Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate lLength by taking the square root of the sum of all squared values in each vector.
 ```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
 unit_vector <- function(vec) {
   return(vec / (sqrt(sum(vec^2, na.rm = TRUE))))
@@ -245,7 +238,6 @@ kable_table(joined, "Table 6: Converting weighted word frequenies into unit vect
   row_spec(8, bold = T, background = "lightgreen")
 ```
 Once normalised, the dot product of two vectors computes the cosine of the angle between them. This simple dot product calculation of the columns in green in table 6 creates table 7 below. We can see that, of the three documents, documents 1 and 2 are most similar to each other with a value of 0.24.
-
 ```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
 joined_matrix <- as.matrix(joined[, 13:16])
 compare_all <- base::crossprod(joined_matrix, joined_matrix)
