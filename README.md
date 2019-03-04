@@ -1,3 +1,16 @@
+Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM)
+================
+
+-   [Summary](#summary)
+-   [What is this document for?](#what-is-this-document-for)
+    -   [Where can I learn more about NLP?](#where-can-i-learn-more-about-nlp)
+-   [An example of TF-IDF VSM](#an-example-of-tf-idf-vsm)
+    -   [Documents to be searched](#documents-to-be-searched)
+    -   [Pre-processing the text](#pre-processing-the-text)
+    -   [Create the Term-Document Matrix](#create-the-term-document-matrix)
+    -   [Calculate IDF for each Word across all documents](#calculate-idf-for-each-word-across-all-documents)
+    -   [Calculate the weight for each word in each document](#calculate-the-weight-for-each-word-in-each-document)
+-   [Beyond TF-IDF: Latent Semantic Analysis (SVD) and Word2vec](#beyond-tf-idf-latent-semantic-analysis-svd-and-word2vec)
 
 Summary
 =======

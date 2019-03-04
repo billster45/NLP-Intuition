@@ -1,5 +1,9 @@
 ---
-output: rmarkdown::github_document
+title: "Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM)"
+output:
+  github_document:
+    toc: true
+    toc_depth: 2
 always_allow_html: yes
 ---
 ```{r, echo=FALSE, include=TRUE, results="asis"}
