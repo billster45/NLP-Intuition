@@ -10,6 +10,8 @@ Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM)
     -   [Create the Term-Document Matrix](#create-the-term-document-matrix)
     -   [Calculate IDF for each Word across all documents](#calculate-idf-for-each-word-across-all-documents)
     -   [Calculate the weight for each word in each document](#calculate-the-weight-for-each-word-in-each-document)
+        -   [Compare query to all docs (finding the angle between vectors)](#compare-query-to-all-docs-finding-the-angle-between-vectors)
+        -   [Unit vectors for faster computation](#unit-vectors-for-faster-computation)
 -   [Beyond TF-IDF: Latent Semantic Analysis (SVD) and Word2vec](#beyond-tf-idf-latent-semantic-analysis-svd-and-word2vec)
 
 Summary

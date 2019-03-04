@@ -3,7 +3,7 @@ title: "Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model 
 output:
   github_document:
     toc: true
-    toc_depth: 2
+    toc_depth: 3
 always_allow_html: yes
 ---
 ```{r, echo=FALSE, include=TRUE, results="asis"}
