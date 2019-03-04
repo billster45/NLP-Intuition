@@ -54,7 +54,7 @@ The following are excellent NLP tutorials taking you from basic to advanced know
 
 ## Documents to be searched
 
-```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 d1 <- c("Shipment of gold damaged in a fire.")
 d2 <- c("Delivery of silver arrived in a silver truck.")
 d3 <- c("Shipment of gold arrived in a truck.")
@@ -64,7 +64,7 @@ q1 <- c("gold silver truck")
 
 In this example we use the search terms "`r q1`" to find the document in Table 1 that matches most closely.
 
-```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(magrittr)
 library(kableExtra)
@@ -82,7 +82,7 @@ query <- data.frame(q1) %>%
 
 We first use the [Tidytext::unnest_tokens()](https://www.tidytextmining.com/tidytext.html#the-unnest_tokens-function) function to split the text for each document into one word per row. We then use  [dplyr count](https://suzan.rbind.io/2018/04/dplyr-tutorial-4/#counting-the-number-of-observations) to count how often each word appears in each document.
 
-```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 library(tidytext)
 
 seperate_words <- words %>%
@@ -98,9 +98,9 @@ kable_table(seperate_words, "Table 2: All words split out from each document")
 
 Next we reshape Table 2 from a long [Tidy](https://www.tidytextmining.com/tidytext.html#contrasting-tidy-text-with-other-data-structures) table structure into a wide table. The wide table is called a [Term-Document Matrix](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#tdm) where the terms are shown as one word per row, and each document is represented by its own column.
 
-The last column $d_{i}$ in green counts in how many **documents** each word occurs, one or more times, globally across all documents (also known as the Document Frequency).
+The last column $d_{i}$ counts in how many **documents** each word occurs, one or more times, globally across all documents (also known as the Document Frequency).
 
-```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 tdm <- seperate_words %>%
   tidyr::spread(key = document, value = n) %>%
   base::replace(is.na(.), 0) %>%
@@ -108,8 +108,7 @@ tdm <- seperate_words %>%
   dplyr::summarise(di = sum(d1 >= 1) + sum(d2 >= 1) + sum(d3 >= 1)) %>%
   dplyr::arrange(desc(di), word)
 
-kable_table(tdm, "Table 3: Term Document Matrix (TDM)") %>%
-  kableExtra::column_spec(5, background = "lightgreen")
+kable_table(tdm, "Table 3: Term Document Matrix (TDM)")
 ```
 
 ## Calculate IDF for each Word across all documents
@@ -120,7 +119,7 @@ To calculate the $IDF_{i}$, for each word, divide the total number of documents 
 
 Table 4 is sorted by $IDF_{i}$ in descending order. $IDF_{i}$ is the log of $D/d_{i}$. Rare words like "damaged" have the highest $IDF_{i}$ as they appear in only one document. While words in all of the documents do not offer any discrimination. They have an $IDF_{i}$ value of zero (e.g. "of" = log(3/3) = 0). Low $IDF_{i}$ value words are often removed in the data preparation stage of text mining. Such words are known as "stop words".
 
-```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 tdm <- tdm %>%
   mutate(
     Ddi = 3 / di,
@@ -129,8 +128,7 @@ tdm <- tdm %>%
   mutate_at(6:7, funs(round(., 2))) %>%
   dplyr::arrange(desc(IDFi), word)
 
-kable_table(tdm, "Table 4: TDM with Inverse Document Frequency") %>%
-  column_spec(7, background = "lightgreen")
+kable_table(tdm, "Table 4: TDM with Inverse Document Frequency")
 ```
 
 Intuitively, the importance of a word in document will not increase proportionally with frequency. Therefore, a simple method to reduce the importance of rare words is to take the logarithm of the ratio of $D/d_{i}$. This works particularly well on very rare words used in only one document. They will have an IDF value the same as the total number of documents which could be in the thousands or more. A further exploration of the theory of IDF and how it relates to Information theory is described in detail [here](  http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.97.7340&rep=rep1&type=pdf)
@@ -139,10 +137,10 @@ Typically, log of base-10 is used for TF-IDF. Base-10 allows faster mental calcu
 
 ## Calculate the weight for each word in each document 
 
-We now search the collection of three documents with our search terms by adding the column $q$ shown in green. For each word, we multiply its $IDF_{i}$ value by the Term Frequency, which is simply the number of times the word appears in both the query and in each document. This weights the word counts in each document and the query by the discriminatory information each word has been found to provide across all the documents globally.
+We now search the collection of three documents with our search terms by adding query column. For each word, we multiply its $IDF_{i}$ value by the Term Frequency, which is simply the number of times the word appears in both the query and in each document. This weights the word counts in each document and the query by the discriminatory information each word has been found to provide across all the documents globally.
 
 Look again at Table 1. We can see "silver" is rare globally among all the documents. Iit is only used in document 2. While"silver" is a common word locally as it is used twice in document 2. No other word is used twice in the same document. Looking at the weights calculated for "silver", the importance of the word "silver" is reflected in the high weight calculated. Silver appears in $d_{2}$ two times, and when multiplied with its $IDF_{i}$ it has the value 0.954 shown in the column $w_{i}2$. This is the highest weight in the whole matrix.
-```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 query_seperate_words <- query %>%
   tidytext::unnest_tokens(word, text) %>%
   dplyr::count(document, word, sort = TRUE) %>%
@@ -162,10 +160,9 @@ joined <- tdm %>%
   dplyr::arrange(desc(IDFi), word) %>%
   mutate_at(6:11, funs(round(., 2)))
 
-kable_table(joined, "Table 5: Weight word frequecies with the IDF value for each word") %>%
-  column_spec(8, bold = T, background = "lightgreen") %>%
-  row_spec(4, bold = T, background = "lightgreen")
+kable_table(joined, "Table 5: Weight word frequecies with the IDF value for each word")
 ```
+
 ## Compare query to all documents
 To compensate for the effect of [document length](https://cmry.github.io/notes/euclidean-v-cosine), the standard way of quantifying the similarity between the words in the query and the words in each document is to measure the angle between the two vectors of words. This is called the [cosine of similarity](https://nlp.stanford.edu/IR-book/html/htmledition/dot-products-1.html).
 
@@ -175,7 +172,8 @@ This [example](https://www.varsitytutors.com/precalculus-help/find-the-measure-o
 That is to say, the dot product of two vectors will be equal to the cosine of the angle between the vectors, times the lengths of each of the vectors.
 
 The cosine similarity value shows that document 2 is the closest match to the search terms "`r q1`". We can understand why intuitively if we consider that document 2 contains two of the search terms ("silver" and "truck"). Also, document 2 is the only document to contain the rare word "silver". 
-```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 vector_length <- function(vec) {
   return(sqrt(sum(vec^2, na.rm = TRUE)))
 }
@@ -198,11 +196,12 @@ which_document <- data.frame(document, text, query, cosine) %>%
   dplyr::arrange(desc(cosine)) %>%
   mutate_at(4, funs(round(., 2)))
 
-kable_table(which_document, "Table 7: Cosine similarity value between the query and each document") %>%
-  row_spec(1, bold = T, background = "lightgreen")
+kable_table(which_document, "Table 7: Cosine similarity value between the query and each document") 
 ```
+
 ## Unit vectors for faster computation
-Typically, before calculating the cosine of the angle we [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector it into a "unit vector" shown as columns qhat, d1hat, d2hat, d3hat. Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate lLength by taking the square root of the sum of all squared values in each vector.
+Typically, before calculating the cosine of the angle we [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector it into a "unit vector" shown as columns qhat, d1hat, d2hat, d3hat. Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate length by taking the square root of the sum of all squared values in each vector.
+
 ```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
 unit_vector <- function(vec) {
   return(vec / (sqrt(sum(vec^2, na.rm = TRUE))))
@@ -216,13 +215,10 @@ joined$d3hat <- unit_vector(joined$wi3)
 joined <- joined %>%
   mutate_at(6:15, funs(round(., 2)))
 
-kable_table(joined, "Table 6: Converting weighted word frequenies into unit vectors ") %>%
-  column_spec(13:16, background = "lightgreen") %>%
-  row_spec(4, bold = T, background = "lightgreen") %>%
-  row_spec(6, bold = T, background = "lightgreen") %>%
-  row_spec(8, bold = T, background = "lightgreen")
+kable_table(joined, "Table 6: Converting weighted word frequenies into unit vectors ")
 ```
-Once normalised, the dot product of two vectors computes the cosine of the angle between them. This simple dot product calculation of the columns in green in table 6 creates table 7 below. We can see that, of the three documents, documents 1 and 2 are most similar to each other with a value of 0.24.
+Once normalised, the dot product of two vectors computes the cosine of the angle between them. This simple dot product calculation of normalised vectors in table 6 creates table 7 below. We can see that, of the three documents, documents 1 and 2 are most similar to each other with a value of 0.24.
+
 ```{r, echo=TRUE, warning=FALSE, message=FALSE, cache=TRUE}
 joined_matrix <- as.matrix(joined[, 13:16])
 compare_all <- base::crossprod(joined_matrix, joined_matrix)

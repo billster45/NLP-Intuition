@@ -75,7 +75,7 @@ words <- data.frame(d1, d2, d3) %>%
 kable_table(words, "Table 1: Three documents we want to search")
 ```
 
-<table class="table table-striped table-hover table-condensed" style="width: auto !important; ">
+<table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
 Table 1: Three documents we want to search
 </caption>
@@ -138,7 +138,7 @@ seperate_words <- words %>%
 kable_table(seperate_words, "Table 2: All words split out from each document")
 ```
 
-<table class="table table-striped table-hover table-condensed" style="width: auto !important; ">
+<table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
 Table 2: All words split out from each document
 </caption>
@@ -394,7 +394,7 @@ Create the Term-Document Matrix
 
 Next we reshape Table 2 from a long [Tidy](https://www.tidytextmining.com/tidytext.html#contrasting-tidy-text-with-other-data-structures) table structure into a wide table. The wide table is called a [Term-Document Matrix](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#tdm) where the terms are shown as one word per row, and each document is represented by its own column.
 
-The last column *d*<sub>*i*</sub> in green counts in how many **documents** each word occurs, one or more times, globally across all documents (also known as the Document Frequency).
+The last column *d*<sub>*i*</sub> counts in how many **documents** each word occurs, one or more times, globally across all documents (also known as the Document Frequency).
 
 ``` r
 tdm <- seperate_words %>%
@@ -404,11 +404,10 @@ tdm <- seperate_words %>%
   dplyr::summarise(di = sum(d1 >= 1) + sum(d2 >= 1) + sum(d3 >= 1)) %>%
   dplyr::arrange(desc(di), word)
 
-kable_table(tdm, "Table 3: Term Document Matrix (TDM)") %>%
-  kableExtra::column_spec(5, background = "lightgreen")
+kable_table(tdm, "Table 3: Term Document Matrix (TDM)")
 ```
 
-<table class="table table-striped table-hover table-condensed" style="width: auto !important; ">
+<table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
 Table 3: Term Document Matrix (TDM)
 </caption>
@@ -445,7 +444,7 @@ a
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 3
 </td>
 </tr>
@@ -462,7 +461,7 @@ in
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 3
 </td>
 </tr>
@@ -479,7 +478,7 @@ of
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 3
 </td>
 </tr>
@@ -496,7 +495,7 @@ arrived
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 2
 </td>
 </tr>
@@ -513,7 +512,7 @@ gold
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 2
 </td>
 </tr>
@@ -530,7 +529,7 @@ shipment
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 2
 </td>
 </tr>
@@ -547,7 +546,7 @@ truck
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 2
 </td>
 </tr>
@@ -564,7 +563,7 @@ damaged
 <td style="text-align:right;">
 0
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
 </tr>
@@ -581,7 +580,7 @@ delivery
 <td style="text-align:right;">
 0
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
 </tr>
@@ -598,7 +597,7 @@ fire
 <td style="text-align:right;">
 0
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
 </tr>
@@ -615,7 +614,7 @@ silver
 <td style="text-align:right;">
 0
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
 </tr>
@@ -639,8 +638,7 @@ tdm <- tdm %>%
   mutate_at(6:7, funs(round(., 2))) %>%
   dplyr::arrange(desc(IDFi), word)
 
-kable_table(tdm, "Table 4: TDM with Inverse Document Frequency") %>%
-  column_spec(7, background = "lightgreen")
+kable_table(tdm, "Table 4: TDM with Inverse Document Frequency")
 ```
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
@@ -692,7 +690,7 @@ damaged
 <td style="text-align:right;">
 3.0
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.48
 </td>
 </tr>
@@ -715,7 +713,7 @@ delivery
 <td style="text-align:right;">
 3.0
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.48
 </td>
 </tr>
@@ -738,7 +736,7 @@ fire
 <td style="text-align:right;">
 3.0
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.48
 </td>
 </tr>
@@ -761,7 +759,7 @@ silver
 <td style="text-align:right;">
 3.0
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.48
 </td>
 </tr>
@@ -784,7 +782,7 @@ arrived
 <td style="text-align:right;">
 1.5
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.18
 </td>
 </tr>
@@ -807,7 +805,7 @@ gold
 <td style="text-align:right;">
 1.5
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.18
 </td>
 </tr>
@@ -830,7 +828,7 @@ shipment
 <td style="text-align:right;">
 1.5
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.18
 </td>
 </tr>
@@ -853,7 +851,7 @@ truck
 <td style="text-align:right;">
 1.5
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.18
 </td>
 </tr>
@@ -876,7 +874,7 @@ a
 <td style="text-align:right;">
 1.0
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
 </tr>
@@ -899,7 +897,7 @@ in
 <td style="text-align:right;">
 1.0
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
 </tr>
@@ -922,7 +920,7 @@ of
 <td style="text-align:right;">
 1.0
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
 </tr>
@@ -935,7 +933,7 @@ Typically, log of base-10 is used for TF-IDF. Base-10 allows faster mental calcu
 Calculate the weight for each word in each document
 ---------------------------------------------------
 
-We now search the collection of three documents with our search terms by adding the column *q* shown in green. For each word, we multiply its *I**D**F*<sub>*i*</sub> value by the Term Frequency, which is simply the number of times the word appears in both the query and in each document. This weights the word counts in each document and the query by the discriminatory information each word has been found to provide across all the documents globally.
+We now search the collection of three documents with our search terms by adding query column. For each word, we multiply its *I**D**F*<sub>*i*</sub> value by the Term Frequency, which is simply the number of times the word appears in both the query and in each document. This weights the word counts in each document and the query by the discriminatory information each word has been found to provide across all the documents globally.
 
 Look again at Table 1. We can see "silver" is rare globally among all the documents. Iit is only used in document 2. While"silver" is a common word locally as it is used twice in document 2. No other word is used twice in the same document. Looking at the weights calculated for "silver", the importance of the word "silver" is reflected in the high weight calculated. Silver appears in *d*<sub>2</sub> two times, and when multiplied with its *I**D**F*<sub>*i*</sub> it has the value 0.954 shown in the column *w*<sub>*i*</sub>2. This is the highest weight in the whole matrix.
 
@@ -959,12 +957,10 @@ joined <- tdm %>%
   dplyr::arrange(desc(IDFi), word) %>%
   mutate_at(6:11, funs(round(., 2)))
 
-kable_table(joined, "Table 5: Weight word frequecies with the IDF value for each word") %>%
-  column_spec(8, bold = T, background = "lightgreen") %>%
-  row_spec(4, bold = T, background = "lightgreen")
+kable_table(joined, "Table 5: Weight word frequecies with the IDF value for each word")
 ```
 
-<table class="table table-striped table-hover table-condensed" style="width: auto !important; ">
+<table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
 Table 5: Weight word frequecies with the IDF value for each word
 </caption>
@@ -1031,7 +1027,7 @@ damaged
 <td style="text-align:right;">
 0.48
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
@@ -1069,7 +1065,7 @@ delivery
 <td style="text-align:right;">
 0.48
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
@@ -1107,7 +1103,7 @@ fire
 <td style="text-align:right;">
 0.48
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
@@ -1124,40 +1120,40 @@ fire
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:left;">
 silver
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 2
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 3.0
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.48
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.48
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.96
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
 </tr>
@@ -1183,7 +1179,7 @@ arrived
 <td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
@@ -1221,7 +1217,7 @@ gold
 <td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
@@ -1259,7 +1255,7 @@ shipment
 <td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
@@ -1297,7 +1293,7 @@ truck
 <td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
@@ -1335,7 +1331,7 @@ a
 <td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
@@ -1373,7 +1369,7 @@ in
 <td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
@@ -1411,7 +1407,7 @@ of
 <td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
@@ -1429,6 +1425,7 @@ of
 </tr>
 </tbody>
 </table>
+
 Compare query to all documents
 ------------------------------
 
@@ -1463,8 +1460,7 @@ which_document <- data.frame(document, text, query, cosine) %>%
   dplyr::arrange(desc(cosine)) %>%
   mutate_at(4, funs(round(., 2)))
 
-kable_table(which_document, "Table 7: Cosine similarity value between the query and each document") %>%
-  row_spec(1, bold = T, background = "lightgreen")
+kable_table(which_document, "Table 7: Cosine similarity value between the query and each document") 
 ```
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
@@ -1489,16 +1485,16 @@ cosine
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:left;">
 document2
 </td>
-<td style="text-align:left;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:left;">
 Delivery of silver arrived in a silver truck.
 </td>
-<td style="text-align:left;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:left;">
 gold silver truck
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.82
 </td>
 </tr>
@@ -1532,10 +1528,11 @@ gold silver truck
 </tr>
 </tbody>
 </table>
+
 Unit vectors for faster computation
 -----------------------------------
 
-Typically, before calculating the cosine of the angle we [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector it into a "unit vector" shown as columns qhat, d1hat, d2hat, d3hat. Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate lLength by taking the square root of the sum of all squared values in each vector.
+Typically, before calculating the cosine of the angle we [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector it into a "unit vector" shown as columns qhat, d1hat, d2hat, d3hat. Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate length by taking the square root of the sum of all squared values in each vector.
 
 ``` r
 unit_vector <- function(vec) {
@@ -1550,14 +1547,10 @@ joined$d3hat <- unit_vector(joined$wi3)
 joined <- joined %>%
   mutate_at(6:15, funs(round(., 2)))
 
-kable_table(joined, "Table 6: Converting weighted word frequenies into unit vectors ") %>%
-  column_spec(13:16, background = "lightgreen") %>%
-  row_spec(4, bold = T, background = "lightgreen") %>%
-  row_spec(6, bold = T, background = "lightgreen") %>%
-  row_spec(8, bold = T, background = "lightgreen")
+kable_table(joined, "Table 6: Converting weighted word frequenies into unit vectors ")
 ```
 
-<table class="table table-striped table-hover table-condensed" style="width: auto !important; ">
+<table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
 Table 6: Converting weighted word frequenies into unit vectors
 </caption>
@@ -1651,16 +1644,16 @@ damaged
 <td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.66
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.0
 </td>
 </tr>
@@ -1701,16 +1694,16 @@ delivery
 <td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.44
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.0
 </td>
 </tr>
@@ -1751,66 +1744,66 @@ fire
 <td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.66
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:left;">
 silver
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 2
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 3.0
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.48
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.48
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.96
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.88
 </td>
-<td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.87
 </td>
-<td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.0
 </td>
 </tr>
@@ -1851,66 +1844,66 @@ arrived
 <td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.16
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.5
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:left;">
 gold
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 2
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1.5
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.33
 </td>
-<td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.25
 </td>
-<td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.5
 </td>
 </tr>
@@ -1951,66 +1944,66 @@ shipment
 <td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.25
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.5
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:left;">
 truck
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 2
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1.5
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.18
 </td>
-<td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.33
 </td>
-<td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.16
 </td>
-<td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
+<td style="text-align:right;">
 0.5
 </td>
 </tr>
@@ -2051,16 +2044,16 @@ a
 <td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.0
 </td>
 </tr>
@@ -2101,16 +2094,16 @@ in
 <td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.0
 </td>
 </tr>
@@ -2151,22 +2144,22 @@ of
 <td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.00
 </td>
-<td style="text-align:right;background-color: lightgreen;">
+<td style="text-align:right;">
 0.0
 </td>
 </tr>
 </tbody>
 </table>
-Once normalised, the dot product of two vectors computes the cosine of the angle between them. This simple dot product calculation of the columns in green in table 6 creates table 7 below. We can see that, of the three documents, documents 1 and 2 are most similar to each other with a value of 0.24.
+Once normalised, the dot product of two vectors computes the cosine of the angle between them. This simple dot product calculation of normalised vectors in table 6 creates table 7 below. We can see that, of the three documents, documents 1 and 2 are most similar to each other with a value of 0.24.
 
 ``` r
 joined_matrix <- as.matrix(joined[, 13:16])
@@ -2270,6 +2263,7 @@ d3
 </tr>
 </tbody>
 </table>
+
 Beyond TF-IDF: Latent Semantic Analysis, SVD and Word2vec
 =========================================================
 
