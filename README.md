@@ -4,7 +4,6 @@ Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM)
 -   [Summary](#summary)
 -   [What is this document for?](#what-is-this-document-for)
 -   [Where can I learn more about NLP?](#where-can-i-learn-more-about-nlp)
--   [Beyond TF-IDF: Latent Semantic Analysis, SVD and Word2vec](#beyond-tf-idf-latent-semantic-analysis-svd-and-word2vec)
 -   [An example of TF-IDF VSM](#an-example-of-tf-idf-vsm)
     -   [Documents to be searched](#documents-to-be-searched)
     -   [Pre-processing the text](#pre-processing-the-text)
@@ -13,6 +12,7 @@ Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM)
     -   [Calculate the weight for each word in each document](#calculate-the-weight-for-each-word-in-each-document)
     -   [Compare query to all documents](#compare-query-to-all-documents)
     -   [Unit vectors for faster computation](#unit-vectors-for-faster-computation)
+-   [Beyond TF-IDF: Latent Semantic Analysis, SVD and Word2vec](#beyond-tf-idf-latent-semantic-analysis-svd-and-word2vec)
 
 Summary
 =======
@@ -47,23 +47,6 @@ The following are excellent NLP tutorials taking you from basic to advanced know
 -   [Speech and Language processing book](https://web.stanford.edu/~jurafsky/slp3/) and associated [YouTube videos](https://www.youtube.com/playlist?list=PLQiyVNMpDLKnZYBTUOlSI9mi9wAErFtFm),
 -   [Introduction to Information Retrieval](https://nlp.stanford.edu/IR-book/)
 -   [NLP-Guidance](https://moj-analytical-services.github.io/NLP-guidance/) written by Sam Tazzyman in the MoJ.
-
-Beyond TF-IDF: Latent Semantic Analysis, SVD and Word2vec
-=========================================================
-
-Representing documents as vectors is called embedding. TF-IDF and LSA (or SVD) have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). Hopefully you now have a more intuitive understanding of word embedding with TF-IDF VSM.
-
-We can improve how document words embedded in a matrix can find similar documents using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but those words are found inside documents that are similar to them. A clearly explained example is in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). It uses a toy text example from the canonical 1990 paper [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf). Page 12 describes how the word "tree" was not in a document, but because it was in documents that were similar, the calculation has still given "tree" some weight - so taking on some information found in similar documents.
-
-LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intuitively too since it a fundamental technique behind many key Data Science tools:
-
--   Latent Semantic Analysis
--   Data dimension reduction prior to Machine Learning
--   Principal Components Analysis (PCA)
--   Image compression
--   Solving linear equations
-
-More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach.
 
 An example of TF-IDF VSM
 ========================
@@ -1446,7 +1429,6 @@ of
 </tr>
 </tbody>
 </table>
-
 Compare query to all documents
 ------------------------------
 
@@ -2288,3 +2270,19 @@ d3
 </tr>
 </tbody>
 </table>
+Beyond TF-IDF: Latent Semantic Analysis, SVD and Word2vec
+=========================================================
+
+Representing documents as vectors is called embedding. TF-IDF and LSA (or SVD) have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). Hopefully you now have a more intuitive understanding of word embedding with TF-IDF VSM.
+
+We can improve how document words embedded in a matrix can find similar documents using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but those words are found inside documents that are similar to them. A clearly explained example is in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). It uses a toy text example from the canonical 1990 paper [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf). Page 12 describes how the word "tree" was not in a document, but because it was in documents that were similar, the calculation has still given "tree" some weight - so taking on some information found in similar documents.
+
+LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intuitively too since it a fundamental technique behind many key Data Science tools:
+
+-   Latent Semantic Analysis
+-   Data dimension reduction prior to Machine Learning
+-   Principal Components Analysis (PCA)
+-   Image compression
+-   Solving linear equations
+
+More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach.
