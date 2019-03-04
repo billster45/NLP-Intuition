@@ -389,6 +389,7 @@ truck
 </tr>
 </tbody>
 </table>
+
 Create the Term-Document Matrix
 -------------------------------
 
@@ -620,6 +621,7 @@ silver
 </tr>
 </tbody>
 </table>
+
 Calculate IDF for each Word across all documents
 ------------------------------------------------
 
