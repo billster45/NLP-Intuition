@@ -54,20 +54,20 @@ An example of TF-IDF VSM
 Documents to be searched
 ------------------------
 
-``` r
-d1 <- c("Shipment of gold damaged in a fire.")
-d2 <- c("Delivery of silver arrived in a silver truck.")
-d3 <- c("Shipment of gold arrived in a truck.")
-
-q1 <- c("gold silver truck")
-```
-
 In this example we use the search terms "gold silver truck" to find the document in Table 1 that matches most closely.
 
 ``` r
 library(tidyverse)
 library(magrittr)
 library(kableExtra)
+
+d1 <- c("Shipment of gold damaged in a fire.")
+d2 <- c("Delivery of silver arrived in a silver truck.")
+d3 <- c("Shipment of gold arrived in a truck.")
+q1 <- c("gold silver truck")
+
+query <- data.frame(q1) %>%
+  tidyr::gather(key = "document", value = "text")
 
 words <- data.frame(d1, d2, d3) %>%
   tidyr::gather(key = "document", value = "text")
@@ -116,10 +116,6 @@ Shipment of gold arrived in a truck.
 </tr>
 </tbody>
 </table>
-``` r
-query <- data.frame(q1) %>%
-  tidyr::gather(key = "document", value = "text")
-```
 
 Pre-processing the text
 -----------------------
@@ -2265,7 +2261,6 @@ d3
 </tr>
 </tbody>
 </table>
-
 Beyond TF-IDF: Latent Semantic Analysis, SVD and Word2vec
 =========================================================
 
