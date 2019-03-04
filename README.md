@@ -10,9 +10,9 @@ Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM)
     -   [Create the Term-Document Matrix](#create-the-term-document-matrix)
     -   [Calculate IDF for each Word across all documents](#calculate-idf-for-each-word-across-all-documents)
     -   [Calculate the weight for each word in each document](#calculate-the-weight-for-each-word-in-each-document)
-    -   [Compare query to all docs (finding the angle between vectors)](#compare-query-to-all-docs-finding-the-angle-between-vectors)
+    -   [Compare query to all documents](#compare-query-to-all-documents)
     -   [Unit vectors for faster computation](#unit-vectors-for-faster-computation)
--   [Beyond TF-IDF: Latent Semantic Analysis (SVD) and Word2vec](#beyond-tf-idf-latent-semantic-analysis-svd-and-word2vec)
+-   [Beyond TF-IDF: Latent Semantic Analysis, SVD and Word2vec](#beyond-tf-idf-latent-semantic-analysis-svd-and-word2vec)
 
 Summary
 =======
@@ -935,9 +935,7 @@ Typically, log of base-10 is used for TF-IDF. Base-10 allows faster mental calcu
 Calculate the weight for each word in each document
 ---------------------------------------------------
 
-We now search the collection of three documents with our search terms by adding the column *q* shown in green.
-
-For each word, we multiply its *I**D**F*<sub>*i*</sub> value by the Term Frequency, which is simply the number of times the term (or word) appears in both the query and in each document. This weights the word counts (or Term Frequencies) per document and the query by the discriminatory information each word has been found to provide across all the documents globally.
+We now search the collection of three documents with our search terms by adding the column *q* shown in green. For each word, we multiply its *I**D**F*<sub>*i*</sub> value by the Term Frequency, which is simply the number of times the term (or word) appears in both the query and in each document. This weights the word counts (or Term Frequencies) per document and the query by the discriminatory information each word has been found to provide across all the documents globally.
 
 Look again at Table 1. We can see "silver" is rare globally among all the documents (it is only used in document 2), and "silver" is a common word locally (it is used twice in document 2). No other word is used twice in the same document. Looking at the weights calculated for "silver" (row highlighted in green) the importance of the word "silver" is reflected in the high weight calculated. Silver appears in *d*<sub>2</sub> two times, and when multiplied with its *I**D**F*<sub>*i*</sub> it has the value 0.954 shown in the column *w*<sub>*i*</sub>2. This is the highest weight in the whole matrix.
 
@@ -1431,8 +1429,8 @@ of
 </tr>
 </tbody>
 </table>
-Compare query to all docs (finding the angle between vectors)
--------------------------------------------------------------
+Compare query to all documents
+------------------------------
 
 To compensate for the effect of [document length](https://cmry.github.io/notes/euclidean-v-cosine), the standard way of quantifying the similarity between the words in the query and the words in each document is to measure the angle between the two vectors of words. This is called the [cosine of similarity](https://nlp.stanford.edu/IR-book/html/htmledition/dot-products-1.html).
 
@@ -2272,8 +2270,8 @@ d3
 </tr>
 </tbody>
 </table>
-Beyond TF-IDF: Latent Semantic Analysis (SVD) and Word2vec
-==========================================================
+Beyond TF-IDF: Latent Semantic Analysis, SVD and Word2vec
+=========================================================
 
 Representing documents as vectors is called embedding. TF-IDF and LSA (or SVD) have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). Hopefully you now have a more intuitive understanding of word embedding with TF-IDF VSM.
 

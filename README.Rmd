@@ -138,9 +138,7 @@ Typically, log of base-10 is used for TF-IDF. Base-10 allows faster mental calcu
 
 ## Calculate the weight for each word in each document 
 
-We now search the collection of three documents with our search terms by adding the column $q$ shown in green. 
-
-For each word, we multiply its $IDF_{i}$ value by the Term Frequency, which is simply the number of times the term (or word) appears in both the query and in each document. This weights the word counts (or Term Frequencies) per document and the query by the discriminatory information each word has been found to provide across all the documents globally.
+We now search the collection of three documents with our search terms by adding the column $q$ shown in green. For each word, we multiply its $IDF_{i}$ value by the Term Frequency, which is simply the number of times the term (or word) appears in both the query and in each document. This weights the word counts (or Term Frequencies) per document and the query by the discriminatory information each word has been found to provide across all the documents globally.
 
 Look again at Table 1. We can see "silver" is rare globally among all the documents (it is only used in document 2), and "silver" is a common word locally (it is used twice in document 2). No other word is used twice in the same document. Looking at the weights calculated for "silver" (row highlighted in green) the importance of the word "silver" is reflected in the high weight calculated. Silver appears in $d_{2}$ two times, and when multiplied with its $IDF_{i}$ it has the value 0.954 shown in the column $w_{i}2$. This is the highest weight in the whole matrix.
 
@@ -169,7 +167,7 @@ kable_table(joined, "Table 5: Weight word frequecies with the IDF value for each
   row_spec(4, bold = T, background = "lightgreen")
 ```
 
-## Compare query to all docs (finding the angle between vectors)
+## Compare query to all documents
 
 To compensate for the effect of [document length](https://cmry.github.io/notes/euclidean-v-cosine), the standard way of quantifying the similarity between the words in the query and the words in each document is to measure the angle between the two vectors of words. This is called the [cosine of similarity](https://nlp.stanford.edu/IR-book/html/htmledition/dot-products-1.html).
 
@@ -241,7 +239,7 @@ rownames(compare_all) <- c("q", "d1", "d2", "d3")
 kable_table(round(compare_all, 2), "Table 7: Compare all vectors with cosine similarity")
 ```
 
-# Beyond TF-IDF: Latent Semantic Analysis (SVD) and Word2vec
+# Beyond TF-IDF: Latent Semantic Analysis, SVD and Word2vec
 
 Representing documents as vectors is called embedding. TF-IDF and LSA (or SVD) have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). Hopefully you now have a more intuitive understanding of word embedding with TF-IDF VSM. 
 
