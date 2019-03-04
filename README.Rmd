@@ -49,6 +49,22 @@ The following are excellent NLP tutorials taking you from basic to advanced know
 - [Introduction to Information Retrieval](https://nlp.stanford.edu/IR-book/) 
 - [NLP-Guidance](https://moj-analytical-services.github.io/NLP-guidance/) written by Sam Tazzyman in the MoJ.
 
+# Beyond TF-IDF: Latent Semantic Analysis, SVD and Word2vec
+
+Representing documents as vectors is called embedding. TF-IDF and LSA (or SVD) have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). Hopefully you now have a more intuitive understanding of word embedding with TF-IDF VSM. 
+
+We can improve how document words embedded in a matrix can find similar documents using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but those words are found inside documents that are similar to them. A clearly explained example is in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). It uses a toy text example from the canonical 1990 paper [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf). Page 12 describes how the word "tree" was not in a document, but because it was in documents that were similar, the calculation has still given "tree" some weight - so taking on some information found in similar documents.
+
+LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intuitively too since  it a fundamental technique behind many key Data Science tools:
+
+* Latent Semantic Analysis 
+* Data dimension reduction prior to Machine Learning
+* Principal Components Analysis (PCA) 
+* Image compression 
+* Solving linear equations
+
+More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach.
+
 # An example of TF-IDF VSM 
 
 ## Documents to be searched
@@ -239,18 +255,3 @@ rownames(compare_all) <- c("q", "d1", "d2", "d3")
 kable_table(round(compare_all, 2), "Table 7: Compare all vectors with cosine similarity")
 ```
 
-# Beyond TF-IDF: Latent Semantic Analysis, SVD and Word2vec
-
-Representing documents as vectors is called embedding. TF-IDF and LSA (or SVD) have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). Hopefully you now have a more intuitive understanding of word embedding with TF-IDF VSM. 
-
-We can improve how document words embedded in a matrix can find similar documents using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but those words are found inside documents that are similar to them. A clearly explained example is in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). It uses a toy text example from the canonical 1990 paper [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf). Page 12 describes how the word "tree" was not in a document, but because it was in documents that were similar, the calculation has still given "tree" some weight - so taking on some information found in similar documents.
-
-LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intuitively too since  it a fundamental technique behind many key Data Science tools:
-
-* Latent Semantic Analysis 
-* Data dimension reduction prior to Machine Learning
-* Principal Components Analysis (PCA) 
-* Image compression 
-* Solving linear equations
-
-More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach.
