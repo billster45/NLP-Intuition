@@ -1446,6 +1446,7 @@ of
 </tr>
 </tbody>
 </table>
+
 Compare query to all documents
 ------------------------------
 
