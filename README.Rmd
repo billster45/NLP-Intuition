@@ -131,7 +131,7 @@ tdm <- tdm %>%
 kable_table(tdm, "Table 4: TDM with Inverse Document Frequency")
 ```
 
-Intuitively, the importance of a word in document will not increase proportionally with frequency. Therefore, a simple method to reduce the importance of rare words is to take the logarithm of the ratio of $D/d_{i}$. This works particularly well on very rare words used in only one document. They will have an IDF value the same as the total number of documents which could be in the thousands or more. A further exploration of the theory of IDF and how it relates to Information theory is described in detail [here](  http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.97.7340&rep=rep1&type=pdf)
+Intuitively, the importance of a word in document will not increase proportionally with frequency. Therefore, a simple method to reduce the importance of rare words is to take the logarithm of the ratio of $D/d_{i}$. This works particularly well on very rare words used in only one document. They will have an IDF value the same as the total number of documents which could be in the thousands or more. A further exploration of the theory of IDF and how it relates to Information theory is described in detail [here](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.97.7340&rep=rep1&type=pdf)
 
 Typically, log of base-10 is used for TF-IDF. Base-10 allows faster mental calculation. For example,log(1)=0, log(10)=1, log(100)=2, etc. It is also simple to transform $IDF_{i}$ back to the original ratio by raising 10 by that value. For example, the $IDF_{i}$ value for "damaged" can be returned to the raw $D/d_{i}$ ratio by raising 10 to the power of 0.4771213, ($10^{0.4771213}$ = 3).
 
