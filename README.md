@@ -406,10 +406,7 @@ tdm <- seperate_words %>%
   dplyr::summarise(di = sum(d1 >= 1) + sum(d2 >= 1) + sum(d3 >= 1)) %>%
   dplyr::arrange(desc(di), word)
 
-tdm_mathy <- tdm
-colnames(tdm_mathy) <- c("word", "$d_{1}$", "$d_{2}$", "$d_{3}$", "$d_{i}$")
-
-kable_table(tdm_mathy, "Table 3: Term Document Matrix (TDM)") %>%
+kable_table(tdm, "Table 3: Term Document Matrix (TDM)") %>%
   column_spec(5, background = "lightgreen")
 ```
 
@@ -423,16 +420,16 @@ Table 3: Term Document Matrix (TDM)
 word
 </th>
 <th style="text-align:right;">
-*d*<sub>1</sub>
+d1
 </th>
 <th style="text-align:right;">
-*d*<sub>2</sub>
+d2
 </th>
 <th style="text-align:right;">
-*d*<sub>3</sub>
+d3
 </th>
 <th style="text-align:right;">
-*d*<sub>*i*</sub>
+di
 </th>
 </tr>
 </thead>
@@ -636,18 +633,13 @@ To calculate the *I**D**F*<sub>*i*</sub>, for each word, divide the total number
 Table 4 is sorted by *I**D**F*<sub>*i*</sub> in descending order. *I**D**F*<sub>*i*</sub> is the log of *D*/*d*<sub>*i*</sub>. Rare words like "damaged" have the highest *I**D**F*<sub>*i*</sub> as they appear in only one document. While words in all of the documents do not offer any discrimination. They have an *I**D**F*<sub>*i*</sub> value of zero (e.g. "of" = log(3/3) = 0). Low *I**D**F*<sub>*i*</sub> value words are often removed in the data preparation stage of text mining. Such words are known as "stop words".
 
 ``` r
-library(formattable)
 tdm <- tdm %>%
   mutate(Ddi = 3/di,
-         IDFi = base::log10(3 / di))
-
-tdm_mathy <- tdm %>%
+         IDFi = base::log10(3 / di)) %>%
   mutate_at(6:7, funs(round(., 2))) %>%
   dplyr::arrange(desc(IDFi), word)
 
-colnames(tdm_mathy) <- c("word", "$d_{1}$", "$d_{2}$", "$d_{3}$", "$d_{i}$","$D/d_{i}$", "$IDF_{i}$")
-
-kable_table(tdm_mathy, "Table 4: TDM with Inverse Document Frequency") %>%
+kable_table(tdm, "Table 4: TDM with Inverse Document Frequency") %>%
   column_spec(7, background = "lightgreen")
 ```
 
@@ -661,22 +653,22 @@ Table 4: TDM with Inverse Document Frequency
 word
 </th>
 <th style="text-align:right;">
-*d*<sub>1</sub>
+d1
 </th>
 <th style="text-align:right;">
-*d*<sub>2</sub>
+d2
 </th>
 <th style="text-align:right;">
-*d*<sub>3</sub>
+d3
 </th>
 <th style="text-align:right;">
-*d*<sub>*i*</sub>
+di
 </th>
 <th style="text-align:right;">
-*D*/*d*<sub>*i*</sub>
+Ddi
 </th>
 <th style="text-align:right;">
-*I**D**F*<sub>*i*</sub>
+IDFi
 </th>
 </tr>
 </thead>
@@ -966,15 +958,10 @@ joined <- tdm %>%
     wi2 = d2 * IDFi,
     wi3 = d3 * IDFi
   ) %>%
-  dplyr::arrange(desc(IDFi), word)
-
-
-joined_mathy <- joined %>%
+  dplyr::arrange(desc(IDFi), word) %>%
   mutate_at(6:11, funs(round(., 2)))
 
-base::colnames(joined_mathy) <- c("word", "$d_{1}$", "$d_{2}$", "$d_{3}$", "$d_{i}$","$D/d_{i}$","$IDF_{i}$", "$q$", "$w_{i}q$", "$w_{i}1$", "$w_{i}2$", "$w_{i}3$")
-
-kable_table(joined_mathy, "Table 5: Weight word frequecies with the IDF value for each word") %>%
+kable_table(joined, "Table 5: Weight word frequecies with the IDF value for each word") %>%
   column_spec(8, bold = T, background = "lightgreen") %>%
   row_spec(4, bold = T, background = "lightgreen")
 ```
@@ -989,37 +976,37 @@ Table 5: Weight word frequecies with the IDF value for each word
 word
 </th>
 <th style="text-align:right;">
-*d*<sub>1</sub>
+d1
 </th>
 <th style="text-align:right;">
-*d*<sub>2</sub>
+d2
 </th>
 <th style="text-align:right;">
-*d*<sub>3</sub>
+d3
 </th>
 <th style="text-align:right;">
-*d*<sub>*i*</sub>
+di
 </th>
 <th style="text-align:right;">
-*D*/*d*<sub>*i*</sub>
+Ddi
 </th>
 <th style="text-align:right;">
-*I**D**F*<sub>*i*</sub>
+IDFi
 </th>
 <th style="text-align:right;">
-*q*
+query
 </th>
 <th style="text-align:right;">
-*w*<sub>*i*</sub>*q*
+wiq
 </th>
 <th style="text-align:right;">
-*w*<sub>*i*</sub>1
+wi1
 </th>
 <th style="text-align:right;">
-*w*<sub>*i*</sub>2
+wi2
 </th>
 <th style="text-align:right;">
-*w*<sub>*i*</sub>3
+wi3
 </th>
 </tr>
 </thead>
@@ -1059,7 +1046,7 @@ damaged
 0.00
 </td>
 <td style="text-align:right;">
-0.0000000
+0.00
 </td>
 </tr>
 <tr>
@@ -1097,7 +1084,7 @@ delivery
 0.48
 </td>
 <td style="text-align:right;">
-0.0000000
+0.00
 </td>
 </tr>
 <tr>
@@ -1135,7 +1122,7 @@ fire
 0.00
 </td>
 <td style="text-align:right;">
-0.0000000
+0.00
 </td>
 </tr>
 <tr>
@@ -1170,10 +1157,10 @@ silver
 0.00
 </td>
 <td style="text-align:right;font-weight: bold;background-color: lightgreen;">
-0.95
+0.96
 </td>
 <td style="text-align:right;font-weight: bold;background-color: lightgreen;">
-0.0000000
+0.00
 </td>
 </tr>
 <tr>
@@ -1211,7 +1198,7 @@ arrived
 0.18
 </td>
 <td style="text-align:right;">
-0.1760913
+0.18
 </td>
 </tr>
 <tr>
@@ -1249,7 +1236,7 @@ gold
 0.00
 </td>
 <td style="text-align:right;">
-0.1760913
+0.18
 </td>
 </tr>
 <tr>
@@ -1287,7 +1274,7 @@ shipment
 0.00
 </td>
 <td style="text-align:right;">
-0.1760913
+0.18
 </td>
 </tr>
 <tr>
@@ -1325,7 +1312,7 @@ truck
 0.18
 </td>
 <td style="text-align:right;">
-0.1760913
+0.18
 </td>
 </tr>
 <tr>
@@ -1363,7 +1350,7 @@ a
 0.00
 </td>
 <td style="text-align:right;">
-0.0000000
+0.00
 </td>
 </tr>
 <tr>
@@ -1401,7 +1388,7 @@ in
 0.00
 </td>
 <td style="text-align:right;">
-0.0000000
+0.00
 </td>
 </tr>
 <tr>
@@ -1439,7 +1426,7 @@ of
 0.00
 </td>
 <td style="text-align:right;">
-0.0000000
+0.00
 </td>
 </tr>
 </tbody>
@@ -1560,12 +1547,10 @@ joined$d1hat <- unit_vector(joined$wi1)
 joined$d2hat <- unit_vector(joined$wi2)
 joined$d3hat <- unit_vector(joined$wi3)
 
-joined_mathy <- joined %>%
+joined <- joined %>%
   mutate_at(6:15, funs(round(., 2)))
 
-base::colnames(joined_mathy) <- c("word", "$d_{1}$", "$d_{2}$", "$d_{3}$", "$d_{i}$", "$D/d_{i}$","$IDF_{i}$", "$q$", "$w_{i}q$", "$w_{i}1$", "$w_{i}2$", "$w_{i}3$", "$\\hat{q}$", "$\\hat{d_{1}}$", "$\\hat{d_{2}}$", "$\\hat{d_{3}}$")
-
-kable_table(joined_mathy, "Table 6: Converting weighted word frequenies into unit vectors ") %>%
+kable_table(joined, "Table 6: Converting weighted word frequenies into unit vectors ") %>%
   column_spec(13:16, background = "lightgreen") %>%
   row_spec(4, bold = T, background = "lightgreen") %>%
   row_spec(6, bold = T, background = "lightgreen") %>%
@@ -1582,49 +1567,49 @@ Table 6: Converting weighted word frequenies into unit vectors
 word
 </th>
 <th style="text-align:right;">
-*d*<sub>1</sub>
+d1
 </th>
 <th style="text-align:right;">
-*d*<sub>2</sub>
+d2
 </th>
 <th style="text-align:right;">
-*d*<sub>3</sub>
+d3
 </th>
 <th style="text-align:right;">
-*d*<sub>*i*</sub>
+di
 </th>
 <th style="text-align:right;">
-*D*/*d*<sub>*i*</sub>
+Ddi
 </th>
 <th style="text-align:right;">
-*I**D**F*<sub>*i*</sub>
+IDFi
 </th>
 <th style="text-align:right;">
-*q*
+query
 </th>
 <th style="text-align:right;">
-*w*<sub>*i*</sub>*q*
+wiq
 </th>
 <th style="text-align:right;">
-*w*<sub>*i*</sub>1
+wi1
 </th>
 <th style="text-align:right;">
-*w*<sub>*i*</sub>2
+wi2
 </th>
 <th style="text-align:right;">
-*w*<sub>*i*</sub>3
+wi3
 </th>
 <th style="text-align:right;">
-$\\hat{q}$
+qhat
 </th>
 <th style="text-align:right;">
-$\\hat{d\_{1}}$
+d1hat
 </th>
 <th style="text-align:right;">
-$\\hat{d\_{2}}$
+d2hat
 </th>
 <th style="text-align:right;">
-$\\hat{d\_{3}}$
+d3hat
 </th>
 </tr>
 </thead>
@@ -1811,13 +1796,13 @@ silver
 0.00
 </td>
 <td style="text-align:right;font-weight: bold;background-color: lightgreen;">
-0.95
+0.96
 </td>
 <td style="text-align:right;font-weight: bold;background-color: lightgreen;">
 0.00
 </td>
 <td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
-0.89
+0.88
 </td>
 <td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
 0.00
@@ -1920,7 +1905,7 @@ gold
 0.33
 </td>
 <td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
-0.24
+0.25
 </td>
 <td style="text-align:right;background-color: lightgreen;font-weight: bold;background-color: lightgreen;">
 0.00
@@ -1970,7 +1955,7 @@ shipment
 0.00
 </td>
 <td style="text-align:right;background-color: lightgreen;">
-0.24
+0.25
 </td>
 <td style="text-align:right;background-color: lightgreen;">
 0.00
