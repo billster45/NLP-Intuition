@@ -68,6 +68,7 @@ In this example we use the search terms "gold silver truck" to find the document
 library(tidyverse)
 library(magrittr)
 library(kableExtra)
+library(formattable)
 
 words <- data.frame(d1, d2, d3) %>%
   tidyr::gather(key = "document", value = "text")
@@ -135,13 +136,12 @@ seperate_words <- words %>%
   dplyr::ungroup() %>%
   dplyr::arrange(word, document)
 
-kable_table(seperate_words, "Table 2: ") %>%
-  scroll_box(width = "300px", height = "300px")
+kable_table(seperate_words, "Table 2: All words split out from each document")
 ```
 
 <table class="table table-striped table-hover table-condensed" style="width: auto !important; ">
 <caption>
-Table 2:
+Table 2: All words split out from each document
 </caption>
 <thead>
 <tr>
@@ -390,7 +390,6 @@ truck
 </tr>
 </tbody>
 </table>
-
 Create the Term-Document Matrix
 -------------------------------
 
@@ -407,7 +406,7 @@ tdm <- seperate_words %>%
   dplyr::arrange(desc(di), word)
 
 kable_table(tdm, "Table 3: Term Document Matrix (TDM)") %>%
-  column_spec(5, background = "lightgreen")
+  kableExtra::column_spec(5, background = "lightgreen")
 ```
 
 <table class="table table-striped table-hover table-condensed" style="width: auto !important; ">
@@ -1456,11 +1455,11 @@ d2cosine <- cosine_similarity(joined$wiq, joined$wi2)
 d3cosine <- cosine_similarity(joined$wiq, joined$wi3)
 
 cosine <- c(d1cosine, d2cosine, d3cosine)
-doc_name <- c("document1", "document2", "document3")
-doc_text <- c(d1,d2,d3)
+document <- c("document1", "document2", "document3")
+text <- c(d1,d2,d3)
 query <- c(q1,q1,q1)
 
-which_document <- data.frame(doc_name,doc_text, query, cosine) %>%
+which_document <- data.frame(document,text, query, cosine) %>%
   dplyr::arrange(desc(cosine)) %>%
   mutate_at(4, funs(round(., 2)))
 
@@ -1475,10 +1474,10 @@ Table 7: Cosine similarity value between the query and each document
 <thead>
 <tr>
 <th style="text-align:left;">
-doc\_name
+document
 </th>
 <th style="text-align:left;">
-doc\_text
+text
 </th>
 <th style="text-align:left;">
 query
@@ -2174,12 +2173,12 @@ compare_all <- base::crossprod(joined_matrix,joined_matrix)
 colnames(compare_all) <- c("q","d1","d2","d3")
 rownames(compare_all) <- c("q","d1","d2","d3")
 
-kable_table(round(compare_all,2),"Table 7: Compare all")
+kable_table(round(compare_all,2),"Table 7: Compare all vectors with cosine similarity")
 ```
 
 <table class="table table-striped table-hover table-condensed" style="width: auto !important; ">
 <caption>
-Table 7: Compare all
+Table 7: Compare all vectors with cosine similarity
 </caption>
 <thead>
 <tr>
@@ -2205,7 +2204,7 @@ d3
 q
 </td>
 <td style="text-align:right;">
-1.00
+0.99
 </td>
 <td style="text-align:right;">
 0.08
@@ -2231,7 +2230,7 @@ d1
 0.00
 </td>
 <td style="text-align:right;">
-0.24
+0.25
 </td>
 </tr>
 <tr>
@@ -2259,7 +2258,7 @@ d3
 0.33
 </td>
 <td style="text-align:right;">
-0.24
+0.25
 </td>
 <td style="text-align:right;">
 0.16
