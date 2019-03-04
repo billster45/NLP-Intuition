@@ -632,8 +632,10 @@ Table 4 is sorted by *I**D**F*<sub>*i*</sub> in descending order. *I**D**F*<sub>
 
 ``` r
 tdm <- tdm %>%
-  mutate(Ddi = 3/di,
-         IDFi = base::log10(3 / di)) %>%
+  mutate(
+    Ddi = 3 / di,
+    IDFi = base::log10(3 / di)
+  ) %>%
   mutate_at(6:7, funs(round(., 2))) %>%
   dplyr::arrange(desc(IDFi), word)
 
@@ -641,7 +643,7 @@ kable_table(tdm, "Table 4: TDM with Inverse Document Frequency") %>%
   column_spec(7, background = "lightgreen")
 ```
 
-<table class="table table-striped table-hover table-condensed" style="width: auto !important; ">
+<table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
 Table 4: TDM with Inverse Document Frequency
 </caption>
@@ -1445,9 +1447,9 @@ vector_length <- function(vec) {
   return(sqrt(sum(vec^2, na.rm = TRUE)))
 }
 
-cosine_similarity <- function(a,b) {
-  sum(crossprod(a,b)) / 
-  (vector_length(a)*vector_length(b))
+cosine_similarity <- function(a, b) {
+  sum(crossprod(a, b)) /
+    (vector_length(a) * vector_length(b))
 }
 
 d1cosine <- cosine_similarity(joined$wiq, joined$wi1)
@@ -1456,10 +1458,10 @@ d3cosine <- cosine_similarity(joined$wiq, joined$wi3)
 
 cosine <- c(d1cosine, d2cosine, d3cosine)
 document <- c("document1", "document2", "document3")
-text <- c(d1,d2,d3)
-query <- c(q1,q1,q1)
+text <- c(d1, d2, d3)
+query <- c(q1, q1, q1)
 
-which_document <- data.frame(document,text, query, cosine) %>%
+which_document <- data.frame(document, text, query, cosine) %>%
   dplyr::arrange(desc(cosine)) %>%
   mutate_at(4, funs(round(., 2)))
 
@@ -1467,7 +1469,7 @@ kable_table(which_document, "Table 7: Cosine similarity value between the query 
   row_spec(1, bold = T, background = "lightgreen")
 ```
 
-<table class="table table-striped table-hover table-condensed" style="width: auto !important; ">
+<table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
 Table 7: Cosine similarity value between the query and each document
 </caption>
@@ -2169,15 +2171,15 @@ of
 Once normalised, the dot product of two vectors computes the cosine of the angle between them. This simple dot product calculation of the columns in green in table 6 creates table 7 below. We can see that, of the three documents, documents 1 and 2 are most similar to each other with a value of 0.24.
 
 ``` r
-joined_matrix <- as.matrix(joined[,13:16])
-compare_all <- base::crossprod(joined_matrix,joined_matrix)
-colnames(compare_all) <- c("q","d1","d2","d3")
-rownames(compare_all) <- c("q","d1","d2","d3")
+joined_matrix <- as.matrix(joined[, 13:16])
+compare_all <- base::crossprod(joined_matrix, joined_matrix)
+colnames(compare_all) <- c("q", "d1", "d2", "d3")
+rownames(compare_all) <- c("q", "d1", "d2", "d3")
 
-kable_table(round(compare_all,2),"Table 7: Compare all vectors with cosine similarity")
+kable_table(round(compare_all, 2), "Table 7: Compare all vectors with cosine similarity")
 ```
 
-<table class="table table-striped table-hover table-condensed" style="width: auto !important; ">
+<table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
 Table 7: Compare all vectors with cosine similarity
 </caption>
