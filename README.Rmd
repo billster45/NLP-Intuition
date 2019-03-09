@@ -227,15 +227,13 @@ kable_table(round(compare_all, 2), "Table 7: Compare all vectors with cosine sim
 
 # Beyond TF-IDF - Latent Semantic Analysis
 
-Representing documents as vectors is called embedding. We can improve how document words embedded in a matrix can find similar documents using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but those words are found inside documents that are similar to them. A clearly explained example is in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). It uses a toy text example from the canonical 1990 paper [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf). Page 12 describes how the word "tree" was not in a document, but because it was in documents that were similar, the calculation has still given "tree" some weight - so taking on some information found in similar documents.
+Representing documents as vectors is called embedding. We can improve how document words embedded in a matrix can find similar documents using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but those words are found inside documents that are similar to them. A clearly explained example is in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). It uses a toy text example from the canonical 1990 paper [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf).
 
 LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intuitively too since  it a fundamental technique behind many key Data Science tools:
 
-* Latent Semantic Analysis 
-* Data dimension reduction prior to Machine Learning
-* Principal Components Analysis [PCA](https://stats.idre.ucla.edu/r/codefragments/svd_demos/) 
+* Data dimension reduction prior to Machine Learning and Principal Components Analysis [PCA](https://stats.idre.ucla.edu/r/codefragments/svd_demos/) 
 * [Image compression](https://towardsdatascience.com/singular-value-decomposition-with-example-in-r-948c3111aa43)
-* Solving linear equations
+* [Solving](http://www.math.usu.edu/~corcoran/classes/old/07spring6550/examples/svd.pdf) linear equations
 
 To build an intuitive understanding of SVD when used for LSA we replicate in R code the same example in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf) that is taken from [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper. 
 
@@ -277,11 +275,11 @@ tdm <- base::t(as.matrix(mydfm))
 kable_table(tdm, "Table 1: The Term Document Matrix")
 ```
 
-We "decompose" the above matrix in Table 1 into three other matrices using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html) that implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). If we multiply together the three decomposed matricies this exactly re-create the orignal matrix. The tansformation, _"can be [intuitively interpreted](https://en.wikipedia.org/wiki/Singular_value_decomposition#Intuitive_interpretations) as a composition of three geometrical transformations: a rotation or reflection, a scaling, and another rotation or reflection."_
+We "decompose" the above matrix in Table 1 into three other matrices using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html) that implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). The tansformation, _"can be [intuitively interpreted](https://en.wikipedia.org/wiki/Singular_value_decomposition#Intuitive_interpretations) as a composition of three geometrical transformations: a rotation or reflection, a scaling, and another rotation or reflection."_ If we multiply together the three decomposed matricies this exactly re-create the orignal matrix. 
 
-We use a built-in function as SVD is a more complex calculation than TF-IDF VSM, so if fully worked here would make the example too long and less intuitive. The details of the calculation can be found on Wikipedia. 
+We use a built-in function as SVD is a more complex calculation than TF-IDF VSM, so if fully worked here would make the example long and much less intuitive.
 
-In Table 2 below the matrix in Table 1 has been decomposed into the U orthogonal matrix, D diagonal matrix, V transposed orthogoanl matrix.
+In Table 2 below the matrix in Table 1 has been decomposed using SVD into U the orthogonal matrix, D the diagonal matrix, and V the transposed orthogoanl matrix.
 (Note when you compare Table 2 to [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper, page 406, some of the signs are different. The reason for this ambiguity is explained [here](https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf).)
 
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
@@ -291,25 +289,22 @@ u <- round(s$u,2)
 d <- round(base::diag(s$d, 9, 9),2) # called the identity matrix by placing on diagonal
 v <- round(base::t(s$v),2) # transpose the matrix (swap rows with columns)
 
-
 knitr::kable(list(u,d,v), caption = "Table 2: U orthogonal matrix, D diagonal matrix, V transposed orthogoanl matrix")
-
-
 ```
-To demonstrate that the three martrices above are a decomposiiotn of the first, we multiple them together 
+To demonstrate that the three martrices U D and V' above are a decomposition of the first, when mutlitplied together the result in Table 3 is the same as our original matrxi in table 1.
 
-```{r}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 reconstruct <- round(u %*% d %*% v,0)
 
 colnames(reconstruct) <- colnames(tdm)
 rownames(reconstruct) <- rownames(tdm)
 
-kable_table(reconstruct, "Table 5: Reconstructing our orginal matrix")
+kable_table(reconstruct, "Table 3: Reconstructing our orginal matrix")
 ```
 
-To reduce the dimensionality, we select only the first two dimensions of each matrix.
+With our three matricies we can reduce the dimensionality if we select only the first two dimensions of each matrix as shown in Table 4 below.
 
-```{r}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 # find largest singular values
 s_red <- RSpectra::svds(tdm,2)
 
@@ -317,20 +312,22 @@ u_red <- round(s_red$u,2)
 d_red <- round(base::diag(s_red$d, 2, 2),2)
 v_red <- round(base::t(s_red$v),2)
 
-kable_table(u_red, "Table 6: U after selecting first two dimensions")
-kable_table(d_red, "Table 7: D after selecting first two dimensions")
-kable_table(v_red, "Table 8: Vafter selecting first two dimensions")
+knitr::kable(list(u_red,d_red,v_red), caption = "Table 4: U, D and V' after selecting only first two dimesions")
 ```
-Then when we multiply out the three matricies above, note how there is avl
-```{r}
+When we multiply out the three reduced matricies above to re-create a new matrix, Table 7. As page 12 of the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf) describes, while the word "trees" is not in the title of m4 ("Graph minors: A survey"), "trees" does now have some weight (0.66). This is because "trees" is in a document that is very similar (m3 = "Graph minors IV: Widths of trees and well-quasi-ordering"). Also, the original value of 1.00 for "survey" in Table 1, which appeared once in m4, has been replaced by 0.42.
+
+Describing this intuitively, _"in constructing the reduced dimensional representation, SVD, with only values along two orthogonal dimensions to go on, has to estimate what words actually appear in each context by using only the information it has extracted. It does that by saying: This text segment is best described as having so much of abstract concept one and so much of abstract concept two, and this word has so much of concept one and so much of concept two, and combining those two pieces of information (by vector arithmetic), my best guess is that word X actually appeared 0.6 times in context Y."_ pages 12 & 14 of the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf).
+_
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 final <- round(u_red %*% d_red %*% v_red,2)
 
 colnames(final) <- colnames(tdm)
 rownames(final) <- rownames(tdm)
 
-kable_table(final, "Table 2: v reduced to two largest singular values")
+kable_table(final, "Table 5: Multiplication of reduced matriices U, D and V'")
 ```
+SVD becomes powerful when we query this matrix, (again using cosine similarity as we did prevsiously for TF-IDF VSM). Now that the title m4 has take on some information from the very similar title m3 it will rank higer in a cosine similarity query result than if we had not reduced the dimensinoatlity with SVD. A simple worked example of using cosine similarity following SVD dimesion reduction is in this [LSA tutorial](https://www.engr.uvic.ca/~seng474/svd.pdf), pages 4-7. It is not replicated here to save length.
 
 # Going beyond count based word embeddings - Word2vec 
 
-TF-IDF and LSA have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach we explore using the [RStudio blog](https://blogs.rstudio.com/tensorflow/posts/2017-12-22-word-embeddings-with-keras/)example
+TF-IDF and LSA have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach we explore using the [RStudio blog](https://blogs.rstudio.com/tensorflow/posts/2017-12-22-word-embeddings-with-keras/) example
