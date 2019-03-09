@@ -1,4 +1,4 @@
-Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM)
+Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM) and Latent Semantic Analysis (LSA) Explained Intuitively
 ================
 
 -   [Summary](#summary)
@@ -18,7 +18,7 @@ Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM)
 Summary
 =======
 
-1.  We learn what the TF-IDF VSM is intuitively. Its used to find which text documents are similar to each other in rank order. The highest ranking documents tend to have matching words that are **rarely** used across all documents.
+1.  We learn what the TF-IDF VSM and then LSA are intuitively. TF-IDF VSM used to find which text documents are similar to each other in rank order. The highest ranking documents tend to have matching words that are **rarely** used across all documents.
 2.  TF-IDF VSM can sound intimidating because of the the technical language used. "Term" means word, "Frequency" means count. The "Vector Space Model" is the part of the calculation that finds the angle between lists of matching word weights. This angle measures the similarity of documents.
 3.  A very simple example is explained. It assumes no Maths or Natural Language Processing (NLP) knowledge. We use basic maths and simple cosine trigonometry.
 4.  TF-IDF VSM is calculated as follows:
@@ -2266,11 +2266,14 @@ LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intui
 
 -   Latent Semantic Analysis
 -   Data dimension reduction prior to Machine Learning
--   Principal Components Analysis (PCA)
--   Image compression
+-   Principal Components Analysis [PCA](https://stats.idre.ucla.edu/r/codefragments/svd_demos/)
+-   [Image compression](https://stats.idre.ucla.edu/r/codefragments/svd_demos/)
 -   Solving linear equations
 
+Here we use the same example in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf) that is taken from [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper. First calculate the Term Document Matrix (or count of words in each document) in the same way.
+
 ``` r
+# https://tutorials.quanteda.io/basic-operations/tokens/tokens_select/
 txt <- c(c1 = "Human machine interface for ABC computer applications",
 c2 = "A survey of user opinion of computer system response time",
 c3 = "The EPS user interface management system",
@@ -2281,475 +2284,21 @@ m2 = "The intersection graph of paths in trees",
 m3 = "Graph minors IV: Widths of trees and well-quasi-ordering",
 m4 = "Graph minors: A survey")
 
-# https://tutorials.quanteda.io/basic-operations/tokens/tokens_select/
 toks <- quanteda::tokens(txt)
 toks_nostop <-quanteda::tokens_select(toks, c("human","interface","computer","user","system","response","time","EPS","survey","trees","graph","minors")
 , selection = "keep", padding = FALSE)
 
-
 mydfm <- quanteda::dfm(toks_nostop)
-mydfm
-```
 
-    ## Document-feature matrix of: 9 documents, 12 features (74.1% sparse).
-    ## 9 x 12 sparse Matrix of class "dfm"
-    ##     features
-    ## docs human interface computer survey user system response time eps trees
-    ##   c1     1         1        1      0    0      0        0    0   0     0
-    ##   c2     0         0        1      1    1      1        1    1   0     0
-    ##   c3     0         1        0      0    1      1        0    0   1     0
-    ##   c4     1         0        0      0    0      2        0    0   1     0
-    ##   c5     0         0        0      0    1      0        1    1   0     0
-    ##   m1     0         0        0      0    0      0        0    0   0     1
-    ##   m2     0         0        0      0    0      0        0    0   0     1
-    ##   m3     0         0        0      0    0      0        0    0   0     1
-    ##   m4     0         0        0      1    0      0        0    0   0     0
-    ##     features
-    ## docs graph minors
-    ##   c1     0      0
-    ##   c2     0      0
-    ##   c3     0      0
-    ##   c4     0      0
-    ##   c5     0      0
-    ##   m1     0      0
-    ##   m2     1      0
-    ##   m3     1      1
-    ##   m4     1      1
-
-``` r
-kable_table(mydfm, "Table 1: A document term matrix")
-```
-
-<table class="table table-striped table-condensed" style="width: auto !important; ">
-<caption>
-Table 1: A document term matrix
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-document
-</th>
-<th style="text-align:right;">
-human
-</th>
-<th style="text-align:right;">
-interface
-</th>
-<th style="text-align:right;">
-computer
-</th>
-<th style="text-align:right;">
-survey
-</th>
-<th style="text-align:right;">
-user
-</th>
-<th style="text-align:right;">
-system
-</th>
-<th style="text-align:right;">
-response
-</th>
-<th style="text-align:right;">
-time
-</th>
-<th style="text-align:right;">
-eps
-</th>
-<th style="text-align:right;">
-trees
-</th>
-<th style="text-align:right;">
-graph
-</th>
-<th style="text-align:right;">
-minors
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-c1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-c2
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-c3
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-c4
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-c5
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-m1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-m2
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-m3
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-m4
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-</tbody>
-</table>
-Next we convert to a term document matrix to match the canonical deer water paper
-
-``` r
+# Convert to a term document matrix to match the example
 tdm <- base::t(as.matrix(mydfm))
 
-kable_table(tdm, "Table 1: A document term matrix")
+kable_table(tdm, "Table 1: The Term Document Matrix")
 ```
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 1: A document term matrix
+Table 1: The Term Document Matrix
 </caption>
 <thead>
 <tr>
@@ -3171,16 +2720,18 @@ minors
 </tr>
 </tbody>
 </table>
-Now we decompose usig SVD into <https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html> <https://en.wikipedia.org/wiki/Singular_value_decomposition>
+Now we "decompose"" that matrix using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html) that implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). We use a built-in function as SVD is a more complex calculation than TF-IDF VSM, so if fully worked here would make the example too long and less intuitive. The details of the calculation can be found on Wikipedia.
 
-**d** a vector containing the singular values of x, of length min(n, p), sorted decreasingly. **u** a matrix whose columns contain the left singular vectors of x, present if nu &gt; 0. Dimension c(n, nu). **v** a matrix whose columns contain the right singular vectors of x, present if nv &gt; 0. Dimension c(p, nv).
+After decomposing the matrix, the SVD function returns...
+
+**u** a matrix whose columns contain the left singular vectors of x, present if nu &gt; 0. Dimension c(n, nu). **d** a vector containing the singular values of x, of length min(n, p), sorted decreasingly. **v** a matrix whose columns contain the right singular vectors of x, present if nv &gt; 0. Dimension c(p, nv).
 
 ``` r
 s <- base::svd(tdm)
 
 u <- round(s$u,2)
-d <- round(base::diag(s$d, 9, 9),2)
-v <- round(base::t(s$v),2)
+d <- round(base::diag(s$d, 9, 9),2) # called the identity matrix by placing on diagonal
+v <- round(base::t(s$v),2) # transpose the matrix (swap rows with columns)
 
 kable_table(v, "Table 2: V")
 ```
@@ -4089,6 +3640,441 @@ Table 4: d
 ```
 
 ``` r
+reconstruct <- round(u %*% d %*% v,0)
+
+colnames(reconstruct) <- colnames(tdm)
+rownames(reconstruct) <- rownames(tdm)
+
+kable_table(reconstruct, "Table 2: v reduced to two largest singular values")
+```
+
+<table class="table table-striped table-condensed" style="width: auto !important; ">
+<caption>
+Table 2: v reduced to two largest singular values
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+c1
+</th>
+<th style="text-align:right;">
+c2
+</th>
+<th style="text-align:right;">
+c3
+</th>
+<th style="text-align:right;">
+c4
+</th>
+<th style="text-align:right;">
+c5
+</th>
+<th style="text-align:right;">
+m1
+</th>
+<th style="text-align:right;">
+m2
+</th>
+<th style="text-align:right;">
+m3
+</th>
+<th style="text-align:right;">
+m4
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+human
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+interface
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+computer
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+survey
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+user
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+system
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+response
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+time
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+eps
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+trees
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+graph
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+minors
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+To reduce the dimensionality we reconstruct the original matrix by multiplying the three matricies above, but we only multiply out only the first two dimensions. This where the "magic"" happens.
+
+``` r
 # find largest singular values
 s_red <- RSpectra::svds(tdm,2)
 
@@ -4298,6 +4284,8 @@ Table 2: v reduced to two largest singular values
 </tr>
 </tbody>
 </table>
+Now when we multiply out the three matricies above, note how there is avl
+
 ``` r
 final <- round(u_red %*% d_red %*% v_red,2)
 
