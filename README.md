@@ -2262,6 +2262,7 @@ d3
 </tr>
 </tbody>
 </table>
+
 Beyond TF-IDF - Latent Semantic Analysis
 ========================================
 
