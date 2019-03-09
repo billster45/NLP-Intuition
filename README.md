@@ -2267,10 +2267,24 @@ LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intui
 -   Latent Semantic Analysis
 -   Data dimension reduction prior to Machine Learning
 -   Principal Components Analysis [PCA](https://stats.idre.ucla.edu/r/codefragments/svd_demos/)
--   [Image compression](https://stats.idre.ucla.edu/r/codefragments/svd_demos/)
+-   [Image compression](https://towardsdatascience.com/singular-value-decomposition-with-example-in-r-948c3111aa43)
 -   Solving linear equations
 
-Here we use the same example in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf) that is taken from [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper. First calculate the Term Document Matrix (or count of words in each document) in the same way.
+To build an intuitive understanding of SVD when used for LSA we replicate in R code the same example in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf) that is taken from [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper.
+
+The example uses the titles of nine technical memoranda, five about human computer interaction (c1 to c5), and four about mathematical graph theory (m1 to m5).
+
+-   c1: Human machine interface for ABC computer applications
+-   c2: A survey of user opinion of computer system response time
+-   c3: The EPS user interface management system
+-   c4: System and human system engineering testing of EPS
+-   c5: Relation of user perceived response time to error measurement
+-   m1: The generation of random, binary, ordered trees
+-   m2: The intersection graph of paths in trees
+-   m3: Graph minors IV: Widths of trees and well-quasi-ordering
+-   m4: Graph minors: A survey
+
+First we calculate the Term Document Matrix (or count of words in each document) in the same way.
 
 ``` r
 # https://tutorials.quanteda.io/basic-operations/tokens/tokens_select/
@@ -2720,11 +2734,11 @@ minors
 </tr>
 </tbody>
 </table>
-Now we "decompose"" that matrix using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html) that implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). We use a built-in function as SVD is a more complex calculation than TF-IDF VSM, so if fully worked here would make the example too long and less intuitive. The details of the calculation can be found on Wikipedia.
+We "decompose" the above matrix in Table 1 into three other matrices using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html) that implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). If we multiply together the three decomposed matricies this exactly re-create the orignal matrix. The tansformation, *"can be [intuitively interpreted](https://en.wikipedia.org/wiki/Singular_value_decomposition#Intuitive_interpretations) as a composition of three geometrical transformations: a rotation or reflection, a scaling, and another rotation or reflection."*
 
-After decomposing the matrix, the SVD function returns...
+We use a built-in function as SVD is a more complex calculation than TF-IDF VSM, so if fully worked here would make the example too long and less intuitive. The details of the calculation can be found on Wikipedia.
 
-**u** a matrix whose columns contain the left singular vectors of x, present if nu &gt; 0. Dimension c(n, nu). **d** a vector containing the singular values of x, of length min(n, p), sorted decreasingly. **v** a matrix whose columns contain the right singular vectors of x, present if nv &gt; 0. Dimension c(p, nv).
+In Table 2 below the matrix in Table 1 has been decomposed into the U orthogonal matrix, D diagonal matrix, V transposed orthogoanl matrix. (Note when you compare Table 2 to [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper, page 406, some of the signs are different. The reason for this ambiguity is explained [here](https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf).)
 
 ``` r
 s <- base::svd(tdm)
@@ -2733,285 +2747,18 @@ u <- round(s$u,2)
 d <- round(base::diag(s$d, 9, 9),2) # called the identity matrix by placing on diagonal
 v <- round(base::t(s$v),2) # transpose the matrix (swap rows with columns)
 
-kable_table(v, "Table 2: V")
+
+knitr::kable(list(u,d,v), caption = "Table 2: U orthogonal matrix, D diagonal matrix, V transposed orthogoanl matrix")
 ```
 
-<table class="table table-striped table-condensed" style="width: auto !important; ">
+<table class="kable_wrapper">
 <caption>
-Table 2: V
+Table 2: U orthogonal matrix, D diagonal matrix, V transposed orthogoanl matrix
 </caption>
 <tbody>
 <tr>
-<td style="text-align:right;">
--0.20
-</td>
-<td style="text-align:right;">
--0.61
-</td>
-<td style="text-align:right;">
--0.46
-</td>
-<td style="text-align:right;">
--0.54
-</td>
-<td style="text-align:right;">
--0.28
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
--0.01
-</td>
-<td style="text-align:right;">
--0.02
-</td>
-<td style="text-align:right;">
--0.08
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
--0.06
-</td>
-<td style="text-align:right;">
-0.17
-</td>
-<td style="text-align:right;">
--0.13
-</td>
-<td style="text-align:right;">
--0.23
-</td>
-<td style="text-align:right;">
-0.11
-</td>
-<td style="text-align:right;">
-0.19
-</td>
-<td style="text-align:right;">
-0.44
-</td>
-<td style="text-align:right;">
-0.62
-</td>
-<td style="text-align:right;">
-0.53
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.11
-</td>
-<td style="text-align:right;">
--0.50
-</td>
-<td style="text-align:right;">
-0.21
-</td>
-<td style="text-align:right;">
-0.57
-</td>
-<td style="text-align:right;">
--0.51
-</td>
-<td style="text-align:right;">
-0.10
-</td>
-<td style="text-align:right;">
-0.19
-</td>
-<td style="text-align:right;">
-0.25
-</td>
-<td style="text-align:right;">
-0.08
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
--0.95
-</td>
-<td style="text-align:right;">
--0.03
-</td>
-<td style="text-align:right;">
-0.04
-</td>
-<td style="text-align:right;">
-0.27
-</td>
-<td style="text-align:right;">
-0.15
-</td>
-<td style="text-align:right;">
-0.02
-</td>
-<td style="text-align:right;">
-0.02
-</td>
-<td style="text-align:right;">
-0.01
-</td>
-<td style="text-align:right;">
--0.02
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
--0.05
-</td>
-<td style="text-align:right;">
-0.21
-</td>
-<td style="text-align:right;">
--0.38
-</td>
-<td style="text-align:right;">
-0.21
-</td>
-<td style="text-align:right;">
--0.33
-</td>
-<td style="text-align:right;">
--0.39
-</td>
-<td style="text-align:right;">
--0.35
-</td>
-<td style="text-align:right;">
--0.15
-</td>
-<td style="text-align:right;">
-0.60
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.08
-</td>
-<td style="text-align:right;">
-0.26
-</td>
-<td style="text-align:right;">
--0.72
-</td>
-<td style="text-align:right;">
-0.37
-</td>
-<td style="text-align:right;">
--0.03
-</td>
-<td style="text-align:right;">
-0.30
-</td>
-<td style="text-align:right;">
-0.21
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
--0.36
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.18
-</td>
-<td style="text-align:right;">
--0.43
-</td>
-<td style="text-align:right;">
--0.24
-</td>
-<td style="text-align:right;">
-0.26
-</td>
-<td style="text-align:right;">
-0.67
-</td>
-<td style="text-align:right;">
--0.34
-</td>
-<td style="text-align:right;">
--0.15
-</td>
-<td style="text-align:right;">
-0.25
-</td>
-<td style="text-align:right;">
-0.04
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
--0.01
-</td>
-<td style="text-align:right;">
-0.05
-</td>
-<td style="text-align:right;">
-0.01
-</td>
-<td style="text-align:right;">
--0.02
-</td>
-<td style="text-align:right;">
--0.06
-</td>
-<td style="text-align:right;">
-0.45
-</td>
-<td style="text-align:right;">
--0.76
-</td>
-<td style="text-align:right;">
-0.45
-</td>
-<td style="text-align:right;">
--0.07
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
--0.06
-</td>
-<td style="text-align:right;">
-0.24
-</td>
-<td style="text-align:right;">
-0.02
-</td>
-<td style="text-align:right;">
--0.08
-</td>
-<td style="text-align:right;">
--0.26
-</td>
-<td style="text-align:right;">
--0.62
-</td>
-<td style="text-align:right;">
-0.02
-</td>
-<td style="text-align:right;">
-0.52
-</td>
-<td style="text-align:right;">
--0.45
-</td>
-</tr>
-</tbody>
-</table>
-``` r
-kable_table(u, "Table 3: u")
-```
-
-<table class="table table-striped table-condensed" style="width: auto !important; ">
-<caption>
-Table 3: u
-</caption>
+<td>
+<table>
 <tbody>
 <tr>
 <td style="text-align:right;">
@@ -3363,14 +3110,9 @@ Table 3: u
 </tr>
 </tbody>
 </table>
-``` r
-kable_table(d, "Table 4: d")
-```
-
-<table class="table table-striped table-condensed" style="width: auto !important; ">
-<caption>
-Table 4: d
-</caption>
+</td>
+<td>
+<table>
 <tbody>
 <tr>
 <td style="text-align:right;">
@@ -3635,9 +3377,278 @@ Table 4: d
 </tr>
 </tbody>
 </table>
-``` r
-# sign ambiguity https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf
-```
+</td>
+<td>
+<table>
+<tbody>
+<tr>
+<td style="text-align:right;">
+-0.20
+</td>
+<td style="text-align:right;">
+-0.61
+</td>
+<td style="text-align:right;">
+-0.46
+</td>
+<td style="text-align:right;">
+-0.54
+</td>
+<td style="text-align:right;">
+-0.28
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+-0.01
+</td>
+<td style="text-align:right;">
+-0.02
+</td>
+<td style="text-align:right;">
+-0.08
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-0.06
+</td>
+<td style="text-align:right;">
+0.17
+</td>
+<td style="text-align:right;">
+-0.13
+</td>
+<td style="text-align:right;">
+-0.23
+</td>
+<td style="text-align:right;">
+0.11
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+<td style="text-align:right;">
+0.62
+</td>
+<td style="text-align:right;">
+0.53
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.11
+</td>
+<td style="text-align:right;">
+-0.50
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+0.57
+</td>
+<td style="text-align:right;">
+-0.51
+</td>
+<td style="text-align:right;">
+0.10
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-0.95
+</td>
+<td style="text-align:right;">
+-0.03
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+0.27
+</td>
+<td style="text-align:right;">
+0.15
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+-0.02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-0.05
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+-0.38
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+-0.33
+</td>
+<td style="text-align:right;">
+-0.39
+</td>
+<td style="text-align:right;">
+-0.35
+</td>
+<td style="text-align:right;">
+-0.15
+</td>
+<td style="text-align:right;">
+0.60
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+0.26
+</td>
+<td style="text-align:right;">
+-0.72
+</td>
+<td style="text-align:right;">
+0.37
+</td>
+<td style="text-align:right;">
+-0.03
+</td>
+<td style="text-align:right;">
+0.30
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+-0.36
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.18
+</td>
+<td style="text-align:right;">
+-0.43
+</td>
+<td style="text-align:right;">
+-0.24
+</td>
+<td style="text-align:right;">
+0.26
+</td>
+<td style="text-align:right;">
+0.67
+</td>
+<td style="text-align:right;">
+-0.34
+</td>
+<td style="text-align:right;">
+-0.15
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-0.01
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+-0.02
+</td>
+<td style="text-align:right;">
+-0.06
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:right;">
+-0.76
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:right;">
+-0.07
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-0.06
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+-0.08
+</td>
+<td style="text-align:right;">
+-0.26
+</td>
+<td style="text-align:right;">
+-0.62
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+0.52
+</td>
+<td style="text-align:right;">
+-0.45
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+To demonstrate that the three martrices above are a decomposiiotn of the first, we multiple them together
 
 ``` r
 reconstruct <- round(u %*% d %*% v,0)
@@ -3645,12 +3656,12 @@ reconstruct <- round(u %*% d %*% v,0)
 colnames(reconstruct) <- colnames(tdm)
 rownames(reconstruct) <- rownames(tdm)
 
-kable_table(reconstruct, "Table 2: v reduced to two largest singular values")
+kable_table(reconstruct, "Table 5: Reconstructing our orginal matrix")
 ```
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 2: v reduced to two largest singular values
+Table 5: Reconstructing our orginal matrix
 </caption>
 <thead>
 <tr>
@@ -4072,7 +4083,7 @@ minors
 </tr>
 </tbody>
 </table>
-To reduce the dimensionality we reconstruct the original matrix by multiplying the three matricies above, but we only multiply out only the first two dimensions. This where the "magic"" happens.
+To reduce the dimensionality, we select only the first two dimensions of each matrix.
 
 ``` r
 # find largest singular values
@@ -4082,12 +4093,12 @@ u_red <- round(s_red$u,2)
 d_red <- round(base::diag(s_red$d, 2, 2),2)
 v_red <- round(base::t(s_red$v),2)
 
-kable_table(u_red, "Table 3: u reduced to two largest singular values")
+kable_table(u_red, "Table 6: U after selecting first two dimensions")
 ```
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 3: u reduced to two largest singular values
+Table 6: U after selecting first two dimensions
 </caption>
 <tbody>
 <tr>
@@ -4189,12 +4200,12 @@ Table 3: u reduced to two largest singular values
 </tbody>
 </table>
 ``` r
-kable_table(d_red, "Table 4: d reduced to two largest singular values")
+kable_table(d_red, "Table 7: D after selecting first two dimensions")
 ```
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 4: d reduced to two largest singular values
+Table 7: D after selecting first two dimensions
 </caption>
 <tbody>
 <tr>
@@ -4216,12 +4227,12 @@ Table 4: d reduced to two largest singular values
 </tbody>
 </table>
 ``` r
-kable_table(v_red, "Table 2: v reduced to two largest singular values")
+kable_table(v_red, "Table 8: Vafter selecting first two dimensions")
 ```
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 2: v reduced to two largest singular values
+Table 8: Vafter selecting first two dimensions
 </caption>
 <tbody>
 <tr>
@@ -4284,7 +4295,7 @@ Table 2: v reduced to two largest singular values
 </tr>
 </tbody>
 </table>
-Now when we multiply out the three matricies above, note how there is avl
+Then when we multiply out the three matricies above, note how there is avl
 
 ``` r
 final <- round(u_red %*% d_red %*% v_red,2)
@@ -4722,4 +4733,4 @@ minors
 Going beyond count based word embeddings - Word2vec
 ===================================================
 
-TF-IDF and LSA have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach.
+TF-IDF and LSA have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach we explore using the [RStudio blog](https://blogs.rstudio.com/tensorflow/posts/2017-12-22-word-embeddings-with-keras/)example

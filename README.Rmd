@@ -234,10 +234,24 @@ LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intui
 * Latent Semantic Analysis 
 * Data dimension reduction prior to Machine Learning
 * Principal Components Analysis [PCA](https://stats.idre.ucla.edu/r/codefragments/svd_demos/) 
-* [Image compression](https://stats.idre.ucla.edu/r/codefragments/svd_demos/)
+* [Image compression](https://towardsdatascience.com/singular-value-decomposition-with-example-in-r-948c3111aa43)
 * Solving linear equations
 
-Here we use the same example in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf) that is taken from [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper. First calculate the Term Document Matrix (or count of words in each document) in the same way.
+To build an intuitive understanding of SVD when used for LSA we replicate in R code the same example in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf) that is taken from [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper. 
+
+The example uses the titles of nine technical memoranda, five about human computer interaction  (c1 to c5), and four about mathematical graph theory (m1 to m5). 
+
+- c1: Human machine interface for ABC computer applications
+- c2: A survey of user opinion of computer system response time
+- c3: The EPS user interface management system
+- c4: System and human system engineering testing of EPS
+- c5: Relation of user perceived response time to error measurement
+- m1: The generation of random, binary, ordered trees
+- m2: The intersection graph of paths in trees
+- m3: Graph minors IV: Widths of trees and well-quasi-ordering
+- m4: Graph minors: A survey
+
+First we calculate the Term Document Matrix (or count of words in each document) in the same way.
 
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
 # https://tutorials.quanteda.io/basic-operations/tokens/tokens_select/
@@ -262,13 +276,14 @@ tdm <- base::t(as.matrix(mydfm))
 
 kable_table(tdm, "Table 1: The Term Document Matrix")
 ```
-Now we "decompose"" that matrix using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html) that implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). We use a built-in function as SVD is a more complex calculation than TF-IDF VSM, so if fully worked here would make the example too long and less intuitive. The details of the calculation can be found on Wikipedia. 
 
-After decomposing the matrix, the SVD function returns...
+We "decompose" the above matrix in Table 1 into three other matrices using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html) that implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). If we multiply together the three decomposed matricies this exactly re-create the orignal matrix. The tansformation, _"can be [intuitively interpreted](https://en.wikipedia.org/wiki/Singular_value_decomposition#Intuitive_interpretations) as a composition of three geometrical transformations: a rotation or reflection, a scaling, and another rotation or reflection."_
 
-__u__	a matrix whose columns contain the left singular vectors of x, present if nu > 0. Dimension c(n, nu).
-__d__	a vector containing the singular values of x, of length min(n, p), sorted decreasingly.
-__v__	a matrix whose columns contain the right singular vectors of x, present if nv > 0. Dimension c(p, nv).
+We use a built-in function as SVD is a more complex calculation than TF-IDF VSM, so if fully worked here would make the example too long and less intuitive. The details of the calculation can be found on Wikipedia. 
+
+In Table 2 below the matrix in Table 1 has been decomposed into the U orthogonal matrix, D diagonal matrix, V transposed orthogoanl matrix.
+(Note when you compare Table 2 to [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper, page 406, some of the signs are different. The reason for this ambiguity is explained [here](https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf).)
+
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
 s <- base::svd(tdm)
 
@@ -276,12 +291,12 @@ u <- round(s$u,2)
 d <- round(base::diag(s$d, 9, 9),2) # called the identity matrix by placing on diagonal
 v <- round(base::t(s$v),2) # transpose the matrix (swap rows with columns)
 
-kable_table(v, "Table 2: V")
-kable_table(u, "Table 3: u")
-kable_table(d, "Table 4: d")
 
-# sign ambiguity https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf
+knitr::kable(list(u,d,v), caption = "Table 2: U orthogonal matrix, D diagonal matrix, V transposed orthogoanl matrix")
+
+
 ```
+To demonstrate that the three martrices above are a decomposiiotn of the first, we multiple them together 
 
 ```{r}
 reconstruct <- round(u %*% d %*% v,0)
@@ -289,10 +304,10 @@ reconstruct <- round(u %*% d %*% v,0)
 colnames(reconstruct) <- colnames(tdm)
 rownames(reconstruct) <- rownames(tdm)
 
-kable_table(reconstruct, "Table 2: v reduced to two largest singular values")
+kable_table(reconstruct, "Table 5: Reconstructing our orginal matrix")
 ```
 
-To reduce the dimensionality we reconstruct the original matrix by multiplying the three matricies above, but we only multiply out only the first two dimensions. This where the "magic"" happens.
+To reduce the dimensionality, we select only the first two dimensions of each matrix.
 
 ```{r}
 # find largest singular values
@@ -302,11 +317,11 @@ u_red <- round(s_red$u,2)
 d_red <- round(base::diag(s_red$d, 2, 2),2)
 v_red <- round(base::t(s_red$v),2)
 
-kable_table(u_red, "Table 3: u reduced to two largest singular values")
-kable_table(d_red, "Table 4: d reduced to two largest singular values")
-kable_table(v_red, "Table 2: v reduced to two largest singular values")
+kable_table(u_red, "Table 6: U after selecting first two dimensions")
+kable_table(d_red, "Table 7: D after selecting first two dimensions")
+kable_table(v_red, "Table 8: Vafter selecting first two dimensions")
 ```
-Now when we multiply out the three matricies above, note how there is avl
+Then when we multiply out the three matricies above, note how there is avl
 ```{r}
 final <- round(u_red %*% d_red %*% v_red,2)
 
@@ -318,4 +333,4 @@ kable_table(final, "Table 2: v reduced to two largest singular values")
 
 # Going beyond count based word embeddings - Word2vec 
 
-TF-IDF and LSA have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach.
+TF-IDF and LSA have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach we explore using the [RStudio blog](https://blogs.rstudio.com/tensorflow/posts/2017-12-22-word-embeddings-with-keras/)example
