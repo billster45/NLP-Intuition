@@ -225,7 +225,7 @@ rownames(compare_all) <- c("q", "d1", "d2", "d3")
 kable_table(round(compare_all, 2), "Table 7: Compare all vectors with cosine similarity")
 ```
 
-# Beyond TF-IDF, Latent Semantic Analysis and Word2vec
+# Beyond TF-IDF - Latent Semantic Analysis
 
 Representing documents as vectors is called embedding. We can improve how document words embedded in a matrix can find similar documents using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but those words are found inside documents that are similar to them. A clearly explained example is in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). It uses a toy text example from the canonical 1990 paper [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf). Page 12 describes how the word "tree" was not in a document, but because it was in documents that were similar, the calculation has still given "tree" some weight - so taking on some information found in similar documents.
 
@@ -236,5 +236,80 @@ LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intui
 * Principal Components Analysis (PCA) 
 * Image compression 
 * Solving linear equations
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+txt <- c(c1 = "Human machine interface for ABC computer applications",
+c2 = "A survey of user opinion of computer system response time",
+c3 = "The EPS user interface management system",
+c4 = "System and human system engineering testing of EPS",
+c5 = "Relation of user perceived response time to error measurement",
+m1 = "The generation of random, binary, ordered trees",
+m2 = "The intersection graph of paths in trees",
+m3 = "Graph minors IV: Widths of trees and well-quasi-ordering",
+m4 = "Graph minors: A survey")
+
+# https://tutorials.quanteda.io/basic-operations/tokens/tokens_select/
+toks <- quanteda::tokens(txt)
+toks_nostop <-quanteda::tokens_select(toks, c("human","interface","computer","user","system","response","time","EPS","survey","trees","graph","minors")
+, selection = "keep", padding = FALSE)
+
+
+mydfm <- quanteda::dfm(toks_nostop)
+mydfm
+
+kable_table(mydfm, "Table 1: A document term matrix")
+
+```
+
+Next we convert to a term document matrix to match the canonical deer water paper
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+tdm <- base::t(as.matrix(mydfm))
+
+kable_table(tdm, "Table 1: A document term matrix")
+```
+
+Now we decompose usig SVD into 
+https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html
+https://en.wikipedia.org/wiki/Singular_value_decomposition
+
+__d__	a vector containing the singular values of x, of length min(n, p), sorted decreasingly.
+__u__	a matrix whose columns contain the left singular vectors of x, present if nu > 0. Dimension c(n, nu).
+__v__	a matrix whose columns contain the right singular vectors of x, present if nv > 0. Dimension c(p, nv).
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+s <- base::svd(tdm)
+
+u <- round(s$u,2)
+d <- round(base::diag(s$d, 9, 9),2)
+v <- round(base::t(s$v),2)
+
+kable_table(v, "Table 2: V")
+kable_table(u, "Table 3: u")
+kable_table(d, "Table 4: d")
+
+# sign ambiguity https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf
+```
+```{r}
+# find largest singular values
+s_red <- RSpectra::svds(tdm,2)
+
+u_red <- round(s_red$u,2)
+d_red <- round(base::diag(s_red$d, 2, 2),2)
+v_red <- round(base::t(s_red$v),2)
+
+kable_table(u_red, "Table 3: u reduced to two largest singular values")
+kable_table(d_red, "Table 4: d reduced to two largest singular values")
+kable_table(v_red, "Table 2: v reduced to two largest singular values")
+```
+
+```{r}
+final <- round(u_red %*% d_red %*% v_red,2)
+
+colnames(final) <- colnames(tdm)
+rownames(final) <- rownames(tdm)
+
+kable_table(final, "Table 2: v reduced to two largest singular values")
+```
+
+# Going beyond count based word embeddings - Word2vec 
 
 TF-IDF and LSA have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach.
