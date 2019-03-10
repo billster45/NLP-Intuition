@@ -1,5 +1,5 @@
 ---
-title: "Intuitive Explanations of TF-IDF VSM, LSA, and context word embeddings in R code"
+title: "Intuitive explanations of TF-IDF VSM, LSA, and context word embeddings in R code"
 output:
   github_document:
     toc: true

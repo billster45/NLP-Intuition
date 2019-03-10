@@ -1,4 +1,4 @@
-Intuitive Explanations of TF-IDF VSM, LSA, and context word embeddings in R code
+Intuitive explanations of TF-IDF VSM, LSA, and context word embeddings in R code
 ================
 
 -   [Summary](#summary)
