@@ -45,7 +45,7 @@ The calculations used in the code are not intended for use in a real project. Fo
 
 Also, the following are excellent NLP tutorials taking you from basic to advanced knowledge, mostly assuming no prior knowledge:
 
--   [Speech and Language processing book](https://web.stanford.edu/~jurafsky/slp3/) and associated [YouTube videos](https://www.youtube.com/playlist?list=PLQiyVNMpDLKnZYBTUOlSI9mi9wAErFtFm),
+-   [Speech and Language processing book](https://web.stanford.edu/~jurafsky/slp3/) and associated [YouTube videos](https://www.youtube.com/playlist?list=PLQiyVNMpDLKnZYBTUOlSI9mi9wAErFtFm). Particularly [Chapter 6 Vector Semantics](https://web.stanford.edu/~jurafsky/slp3/6.pdf) that covers all topics in this document very clearly.
 -   [Introduction to Information Retrieval](https://nlp.stanford.edu/IR-book/)
 -   [NLP-Guidance](https://moj-analytical-services.github.io/NLP-guidance/) written by Sam Tazzyman in the MoJ.
 
