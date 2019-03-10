@@ -49,7 +49,7 @@ The calculations used in the code are not intended for use in a real project. Fo
 
 Also, the following are excellent NLP tutorials taking you from basic to advanced knowledge, mostly assuming no prior knowledge:
 
-- [Speech and Language processing book](https://web.stanford.edu/~jurafsky/slp3/) and associated [YouTube videos](https://www.youtube.com/playlist?list=PLQiyVNMpDLKnZYBTUOlSI9mi9wAErFtFm).
+- [Speech and Language processing](https://web.stanford.edu/~jurafsky/slp3/) book and associated [YouTube videos](https://www.youtube.com/playlist?list=PLQiyVNMpDLKnZYBTUOlSI9mi9wAErFtFm).
 Particularly [Chapter 6 Vector Semantics](https://web.stanford.edu/~jurafsky/slp3/6.pdf) that covers all topics in this document very clearly.
 - [Introduction to Information Retrieval](https://nlp.stanford.edu/IR-book/) 
 - [NLP-Guidance](https://moj-analytical-services.github.io/NLP-guidance/) written by Sam Tazzyman in the MoJ.
@@ -342,3 +342,7 @@ Reducing the dimensionality of a Term Document Matrix in this way with a "trunca
 # Word context - going beyond count based word embeddings - Word2vec 
 
 TF-IDF VSM and LSA have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). More recent methods use the context of words such as [word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Word embeddings like word2vec uses a context predicting approach. This method will also be explained intuitively here soon using this example from  [text2vec](http://text2vec.org/glove.html#word_embeddings).
+
+# Naive Bayes and Sentiment Classification
+
+A future addition in R code will include the simple count based naive bayes classifer on page 6 of [Chapter 4  Naive Bayes and Sentiment Classification](https://web.stanford.edu/~jurafsky/slp3/4.pdf) from the [Speech and Language processing](https://web.stanford.edu/~jurafsky/slp3/).
