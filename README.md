@@ -4298,6 +4298,7 @@ Table 4: U, D and V' after selecting first two dimesions
 </tr>
 </tbody>
 </table>
+
 When we multiply the three reduced matricies in Table 4 this creates Table 5 below. You can see thatwhile the word "trees" is not in the title of m4 ("Graph minors: A survey"), "trees" does now have some weight (0.66, Table 5). This is because "trees" is in a document that is very similar (m3 = "Graph minors IV: Widths of trees and well-quasi-ordering"). Also, the original value of 1.00 for "survey" in Table 1, which appeared once in m4, has been replaced by 0.42.
 
 Describing this intuitively, *"in constructing the reduced dimensional representation, SVD, with only values along two orthogonal dimensions to go on, has to estimate what words actually appear in each context by using only the information it has extracted. It does that by saying: This text segment is best described as having so much of abstract concept one and so much of abstract concept two, and this word has so much of concept one and so much of concept two, and combining those two pieces of information (by vector arithmetic), my best guess is that word X actually appeared 0.6 times in context Y."* pages 12 & 14 of the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). \_
@@ -4735,6 +4736,7 @@ minors
 </tr>
 </tbody>
 </table>
+
 SVD can be useful when we query this matrix, (again using cosine similarity as we did prevsiously for TF-IDF VSM). Now that the title m4 has take on some information from the very similar title m3 it will rank higer in a cosine similarity query result than if we had not reduced the dimensionality with SVD. However, you should judge for yourself if an LSA transformation prior to cosine similarity as improved document search or document similairity. The usefulness will vary between corpora (collections of text documents).
 
 Word context - going beyond count based word embeddings - Word2vec
