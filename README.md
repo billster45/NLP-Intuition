@@ -1,4 +1,4 @@
-Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM) and Latent Semantic Analysis (LSA) Explained Intuitively
+R Code Intuitive Explanations of: Term Frequency - Inverse Document Frequency, Vector Space Model (TF-IDF VSM), Latent Semantic Analysis (LSA), and context word embeddings (e.g. word2vec)
 ================
 
 -   [Summary](#summary)
@@ -11,9 +11,9 @@ Term Frequency - Inverse Document Frequency (TF-IDF) Vector Space Model (VSM) an
     -   [Calculate IDF for each Word across all documents](#calculate-idf-for-each-word-across-all-documents)
     -   [Calculate the weight for each word in each document](#calculate-the-weight-for-each-word-in-each-document)
     -   [Compare query to all documents](#compare-query-to-all-documents)
-    -   [Unit vectors for faster computation](#unit-vectors-for-faster-computation)
--   [Beyond TF-IDF - Latent Semantic Analysis](#beyond-tf-idf---latent-semantic-analysis)
--   [Going beyond count based word embeddings - Word2vec](#going-beyond-count-based-word-embeddings---word2vec)
+    -   [Unit vectors to compare word similarity regardless of frequency](#unit-vectors-to-compare-word-similarity-regardless-of-frequency)
+-   [Beyond TF-IDF - Latent Semantic Analysis (LSA)](#beyond-tf-idf---latent-semantic-analysis-lsa)
+-   [Word context - going beyond count based word embeddings - Word2vec](#word-context---going-beyond-count-based-word-embeddings---word2vec)
 
 Summary
 =======
@@ -27,23 +27,23 @@ Summary
     3.  **TF-IDF:** For each word in each document, we multiply the word count in that document by the log of the TF multiplied by the IDF. Taking the log dampens the importance of the most rare words that are not as important as their raw untransformed value would indicate.
     4.  **Words embedded as vectors:** We call the lists of weights for each word in each document, vectors. When we line up the vectors for each document next to each other we call it a matrix. Putting words into such a matrix is a form of word embedding.
     5.  **Vector Spae Model (VSM):** We measure the similarity of each document vector against every other document vector one-by-one by measuring the angle between them. This is called the cosine similarity. We measure vector similarity by angle instead of distance to compensate for documents of varying lengths.
-5.  We can improve the detection of document similarity using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but, those words are found inside documents that are similar to them. This is done by manipulating the matrix of word counts using Singular Value Decomposition (SVD).
+5.  We can sometimes improve the detection of document similarity using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but, those words are found inside documents that are similar to them. This is done by manipulating the matrix of word counts using Singular Value Decomposition (SVD).
 6.  SVD is well worth learning intuitively too since it a fundamental technique behind many key Data Science tools such as data dimension reduction prior to Machine Learning, Principal Components Analysis (PCA) and solving linear equations.
 7.  TF-IDF VSM and SVD are called count based methods. Modern methods use the context of words such as Word2vec.
 
 What is this document for?
 ==========================
 
-This document describes the TF-IDF VSM in plain English with a real example so that you can understand it **intuitively**. A deeper intuitive understanding helps you move on to understand more complex NLP techniques such as Latent Semantic Analysis. Deeper understanding can also help you better identify where techniques are weak and strong. The [betterexplained](https://betterexplained.com/articles/adept-method/) website and the [Feynman Technique](https://medium.com/taking-note/learning-from-the-feynman-technique-5373014ad230) are two inspirations for explaining important techniques intuitively.
+This document describes the TF-IDF VSM and LSA in plain English with simple examples so that you can understand it **intuitively**. A deeper intuitive understanding helps you move on to understand more complex NLP techniques such as Latent Semantic Analysis. Deeper understanding can also help you better identify where techniques are weak and strong. The [betterexplained](https://betterexplained.com/articles/adept-method/) website and the [Feynman Technique](https://medium.com/taking-note/learning-from-the-feynman-technique-5373014ad230) are two inspirations for explaining important techniques intuitively. In this spirit, this document does not assume any previous Maths or Natural Language Processing (NLP) knowledge.
 
-This document is an R code version of the example on page 6 of this [tutorial](http://www.minerazzi.com/tutorials/term-vector-3.pdf). The example is presented without assuming any previous Maths or Natural Language Processing (NLP) knowledge.
+Below are two R code conversions. The first is of a TF-IDF VSM example from this [tutorial](http://www.minerazzi.com/tutorials/term-vector-3.pdf) (page 6). It is logically followed by an R code conversion of the example in an [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). The LSA example the tutorial uses is from a canonical 1990 paper called, [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf).
 
 Where can I learn more about NLP?
 =================================
 
-The calculations used in the code are not intended for use in a real project. For a real text mining project use a popular NLP package in R or Python. For example, [tidytext](https://github.com/juliasilge/tidytext), [quanteda](https://quanteda.io), or [scikit-learn](https://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html).
+The calculations used in the code are not intended for use in a real project. For a real text mining project use a popular NLP package in R or Python, for example: - [tidytext](https://github.com/juliasilge/tidytext) - [quanteda](https://quanteda.io) - [text2vec](http://text2vec.org/index.html) - [scikit-learn](https://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html).
 
-Also, the following are excellent NLP tutorials taking you from basic to advanced knowledge:
+Also, the following are excellent NLP tutorials taking you from basic to advanced knowledge, mostly assuming no prior knowledge:
 
 -   [Speech and Language processing book](https://web.stanford.edu/~jurafsky/slp3/) and associated [YouTube videos](https://www.youtube.com/playlist?list=PLQiyVNMpDLKnZYBTUOlSI9mi9wAErFtFm),
 -   [Introduction to Information Retrieval](https://nlp.stanford.edu/IR-book/)
@@ -1528,10 +1528,14 @@ gold silver truck
 </tbody>
 </table>
 
-Unit vectors for faster computation
------------------------------------
+Unit vectors to compare word similarity regardless of frequency
+---------------------------------------------------------------
 
-Typically, before calculating the cosine of the angle we [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector into a "unit vector". They are columns qhat, d1hat, d2hat, d3hat. Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate length by taking the square root of the sum of all squared values in each vector.
+Another way to calculate the cosine of the angle is to [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector into a "unit vector".
+
+The reason for normalising is well explained by [Dan Jurafsky](https://web.stanford.edu/~jurafsky/slp3/6.pdf) page (11), *"The dot product is higher if a vector is longer, with higher values in each dimension. More frequent words have longer vectors, since they tend to co-occur with more words and have higher co-occurrence values with each of them. The raw dot product thus will be higher for frequent words. But this is a problem; we’d like a similarity metric that tells us how similar two words are regardless of their frequency."*
+
+They normalised columns (or unit vectors) can be seen below in Table 6 as qhat, d1hat, d2hat, d3hat. Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate length by taking the square root of the sum of all squared values in each vector.
 
 ``` r
 unit_vector <- function(vec) {
@@ -2158,7 +2162,7 @@ of
 </tr>
 </tbody>
 </table>
-Once normalised, the dot product of two vectors computes the cosine of the angle between them. This simple dot product calculation of normalised vectors in table 6 creates table 7 below. We can see that documents 1 and 2 are most similar to each other with a value of 0.24 in table 7.
+Once normalised, the dot product of two vectors computes the cosine of the angle between them. This simple dot product calculation of normalised vectors in table 6 creates Table 7 below. We can see that documents 1 and 2 are most similar to each other with a value of 0.24 (Table 7).
 
 ``` r
 joined_matrix <- as.matrix(joined[, 13:16])
@@ -2263,20 +2267,20 @@ d3
 </tbody>
 </table>
 
-Beyond TF-IDF - Latent Semantic Analysis
-========================================
+Beyond TF-IDF - Latent Semantic Analysis (LSA)
+==============================================
 
-Representing documents as vectors is called embedding. We can improve how document words embedded in a matrix can find similar documents using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but those words are found inside documents that are similar to them. A clearly explained example is in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). It uses a toy text example from the canonical 1990 paper [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf).
+Representing documents as vectors is called embedding. We can sometimes "improve" how document words embedded in a matrix can find similar documents using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but those words are found inside documents that are similar to them.
 
-LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intuitively too since it a fundamental technique behind many key Data Science tools:
+LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intuitively too as it a fundamental technique behind many key Data Science tools:
 
 -   Data dimension reduction prior to Machine Learning and Principal Components Analysis [PCA](https://stats.idre.ucla.edu/r/codefragments/svd_demos/)
 -   [Image compression](https://towardsdatascience.com/singular-value-decomposition-with-example-in-r-948c3111aa43)
 -   [Solving](http://www.math.usu.edu/~corcoran/classes/old/07spring6550/examples/svd.pdf) linear equations
 
-To build an intuitive understanding of SVD when used for LSA we replicate in R code the same example in the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf) that is taken from [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper.
+Below we convert to R a clearly explained example from an [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). It uses the example from [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf).
 
-The example uses the titles of nine technical memoranda, five about human computer interaction (c1 to c5), and four about mathematical graph theory (m1 to m5).
+The example takes the following nine titles, five about human computer interaction (c1 to c5), and four about mathematical graph theory (m1 to m5).
 
 -   c1: Human machine interface for ABC computer applications
 -   c2: A survey of user opinion of computer system response time
@@ -2288,7 +2292,7 @@ The example uses the titles of nine technical memoranda, five about human comput
 -   m3: Graph minors IV: Widths of trees and well-quasi-ordering
 -   m4: Graph minors: A survey
 
-First we calculate the Term Document Matrix (or count of words in each document) in the same way.
+First we calculate the Term Document Matrix (or count of words in each document).
 
 ``` r
 # https://tutorials.quanteda.io/basic-operations/tokens/tokens_select/
@@ -2738,25 +2742,23 @@ minors
 </tr>
 </tbody>
 </table>
-We "decompose" the above matrix in Table 1 into three other matrices using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html) that implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). The tansformation, *"can be [intuitively interpreted](https://en.wikipedia.org/wiki/Singular_value_decomposition#Intuitive_interpretations) as a composition of three geometrical transformations: a rotation or reflection, a scaling, and another rotation or reflection."* If we multiply together the three decomposed matricies this exactly re-create the orignal matrix.
+We "decompose" the above matrix in Table 1 into three other matrices using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html). This R function implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). The tansformation, *"can be [intuitively interpreted](https://en.wikipedia.org/wiki/Singular_value_decomposition#Intuitive_interpretations) as a composition of three geometrical transformations: a rotation or reflection, a scaling, and another rotation or reflection."* If we multiply together the three decomposed matricies this exactly re-create the orignal matrix.
 
-We use a built-in function as SVD is a more complex calculation than TF-IDF VSM, so if fully worked here would make the example long and much less intuitive.
-
-In Table 2 below the matrix in Table 1 has been decomposed using SVD into U the orthogonal matrix, D the diagonal matrix, and V the transposed orthogoanl matrix. (Note when you compare Table 2 to [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper, page 406, some of the signs are different. The reason for this ambiguity is explained [here](https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf).)
+Table 2 is the result of decomposing Table 1 using SVD into U (the orthogonal matrix), D (the diagonal matrix), and V' (the transposed orthogoanl matrix). *(Note if you compare Table 2 to the example in [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) page 406, some of the signs are different. The reason for this ambiguity is explained [here](https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf).) *
 
 ``` r
 s <- base::svd(tdm)
 
 u <- round(s$u,2)
-d <- round(base::diag(s$d, 9, 9),2) # called the identity matrix by placing on diagonal
+d <- round(base::diag(s$d, 9, 9),2) # placing values on the diagonal
 v <- round(base::t(s$v),2) # transpose the matrix (swap rows with columns)
 
-knitr::kable(list(u,d,v), caption = "Table 2: U orthogonal matrix, D diagonal matrix, V transposed orthogoanl matrix")
+knitr::kable(list(u,d,v), caption = "Table 2: U orthogonal matrix, D diagonal matrix, V' transposed orthogoanl matrix")
 ```
 
 <table class="kable_wrapper">
 <caption>
-Table 2: U orthogonal matrix, D diagonal matrix, V transposed orthogoanl matrix
+Table 2: U orthogonal matrix, D diagonal matrix, V' transposed orthogoanl matrix
 </caption>
 <tbody>
 <tr>
@@ -3651,7 +3653,7 @@ Table 2: U orthogonal matrix, D diagonal matrix, V transposed orthogoanl matrix
 </tr>
 </tbody>
 </table>
-To demonstrate that the three martrices U D and V' above are a decomposition of the first, when mutlitplied together the result in Table 3 is the same as our original matrxi in table 1.
+To demonstrate that the three martrices U D and V' above are a decomposition of the first, when mutlitplied together the result in Table 3 is the same as our original matrxi in Table 1.
 
 ``` r
 reconstruct <- round(u %*% d %*% v,0)
@@ -4086,7 +4088,7 @@ minors
 </tr>
 </tbody>
 </table>
-With our three matricies we can reduce the dimensionality if we select only the first two dimensions of each matrix as shown in Table 4 below.
+We can now reduce the dimensionality if we select only the first two dimensions of each matrix as shown in Table 4 below.
 
 ``` r
 # find largest singular values
@@ -4096,12 +4098,12 @@ u_red <- round(s_red$u,2)
 d_red <- round(base::diag(s_red$d, 2, 2),2)
 v_red <- round(base::t(s_red$v),2)
 
-knitr::kable(list(u_red,d_red,v_red), caption = "Table 4: U, D and V' after selecting only first two dimesions")
+knitr::kable(list(u_red,d_red,v_red), caption = "Table 4: U, D and V' after selecting first two dimesions")
 ```
 
 <table class="kable_wrapper">
 <caption>
-Table 4: U, D and V' after selecting only first two dimesions
+Table 4: U, D and V' after selecting first two dimesions
 </caption>
 <tbody>
 <tr>
@@ -4296,7 +4298,7 @@ Table 4: U, D and V' after selecting only first two dimesions
 </tr>
 </tbody>
 </table>
-When we multiply out the three reduced matricies above to re-create a new matrix, Table 7. As page 12 of the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf) describes, while the word "trees" is not in the title of m4 ("Graph minors: A survey"), "trees" does now have some weight (0.66). This is because "trees" is in a document that is very similar (m3 = "Graph minors IV: Widths of trees and well-quasi-ordering"). Also, the original value of 1.00 for "survey" in Table 1, which appeared once in m4, has been replaced by 0.42.
+When we multiply the three reduced matricies in Table 4 this creates Table 5 below. You can see thatwhile the word "trees" is not in the title of m4 ("Graph minors: A survey"), "trees" does now have some weight (0.66, Table 5). This is because "trees" is in a document that is very similar (m3 = "Graph minors IV: Widths of trees and well-quasi-ordering"). Also, the original value of 1.00 for "survey" in Table 1, which appeared once in m4, has been replaced by 0.42.
 
 Describing this intuitively, *"in constructing the reduced dimensional representation, SVD, with only values along two orthogonal dimensions to go on, has to estimate what words actually appear in each context by using only the information it has extracted. It does that by saying: This text segment is best described as having so much of abstract concept one and so much of abstract concept two, and this word has so much of concept one and so much of concept two, and combining those two pieces of information (by vector arithmetic), my best guess is that word X actually appeared 0.6 times in context Y."* pages 12 & 14 of the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). \_
 
@@ -4733,9 +4735,9 @@ minors
 </tr>
 </tbody>
 </table>
-SVD becomes powerful when we query this matrix, (again using cosine similarity as we did prevsiously for TF-IDF VSM). Now that the title m4 has take on some information from the very similar title m3 it will rank higer in a cosine similarity query result than if we had not reduced the dimensinoatlity with SVD. A simple worked example of using cosine similarity following SVD dimesion reduction is in this [LSA tutorial](https://www.engr.uvic.ca/~seng474/svd.pdf), pages 4-7. It is not replicated here to save length.
+SVD can be useful when we query this matrix, (again using cosine similarity as we did prevsiously for TF-IDF VSM). Now that the title m4 has take on some information from the very similar title m3 it will rank higer in a cosine similarity query result than if we had not reduced the dimensionality with SVD. However, you should judge for yourself if an LSA transformation prior to cosine similarity as improved document search or document similairity. The usefulness will vary between corpora (collections of text documents).
 
-Going beyond count based word embeddings - Word2vec
-===================================================
+Word context - going beyond count based word embeddings - Word2vec
+==================================================================
 
-TF-IDF and LSA have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach we explore using the [RStudio blog](https://blogs.rstudio.com/tensorflow/posts/2017-12-22-word-embeddings-with-keras/) example
+TF-IDF and LSA have been called [count based methods](http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf). More recent methods use the context of words such as [Word2vec](https://www.tensorflow.org/tutorials/representation/word2vec). Its word embedding uses a context predicting approach that will be explained here intuitively soon using an [tex2vec](http://text2vec.org/glove.html#word_embeddings).
