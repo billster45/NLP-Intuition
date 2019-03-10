@@ -36,7 +36,7 @@ What is this document for?
 
 This document describes the TF-IDF VSM and LSA in plain English with simple examples so that you can understand it **intuitively**. A deeper intuitive understanding helps you move on to understand more complex NLP techniques such as Latent Semantic Analysis. Deeper understanding can also help you better identify where techniques are weak and strong. The [betterexplained](https://betterexplained.com/articles/adept-method/) website and the [Feynman Technique](https://medium.com/taking-note/learning-from-the-feynman-technique-5373014ad230) are two inspirations for explaining important techniques intuitively. In this spirit, this document does not assume any previous Maths or Natural Language Processing (NLP) knowledge.
 
-Below are two R code conversions. The first is of a TF-IDF VSM example from this [tutorial](http://www.minerazzi.com/tutorials/term-vector-3.pdf) (page 6). It is logically followed by an R code conversion of the example in an [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). The LSA example the tutorial uses is from a canonical 1990 paper called, [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf).
+Below are two R code conversions. The first is of a TF-IDF VSM example from this [tutorial](http://www.minerazzi.com/tutorials/term-vector-3.pdf) (page 6). It is logically followed by an R code conversion of the example in an [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). The LSA example the tutorial uses is from the canonical [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper from 1990.
 
 Where can I learn more about NLP?
 =================================
@@ -925,6 +925,7 @@ of
 </tr>
 </tbody>
 </table>
+
 Intuitively, the importance of a word in document will not increase proportionally with frequency. Therefore, a simple method to reduce the importance of rare words is to take the logarithm of the ratio of *D*/*d*<sub>*i*</sub>. This is particularly important for rare words used in only one document. They will have an IDF value the same as the total number of documents which can be in the thousands or more. A further exploration of the theory of IDF and how it relates to Information theory is described in detail [here](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.97.7340&rep=rep1&type=pdf)
 
 Typically, log of base-10 is used for TF-IDF. Base-10 allows faster mental calculation. For example,log(1)=0, log(10)=1, log(100)=2, etc. It is also simple to transform *I**D**F*<sub>*i*</sub> back to the original ratio by raising 10 by that value. For example, the *I**D**F*<sub>*i*</sub> value for "damaged" can be returned to the raw *D*/*d*<sub>*i*</sub> ratio by raising 10 to the power of 0.4771213, (10<sup>0.4771213</sup> = 3).

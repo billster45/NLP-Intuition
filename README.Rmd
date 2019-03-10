@@ -37,7 +37,7 @@ kable_table <- function(table, title) {
 
 This document describes the TF-IDF VSM and LSA in plain English with simple examples so that you can  understand it **intuitively**. A deeper intuitive understanding helps you move on to understand more complex NLP techniques such as Latent Semantic Analysis. Deeper understanding can also help you better identify where techniques are weak and strong. The [betterexplained](https://betterexplained.com/articles/adept-method/) website and the [Feynman Technique](https://medium.com/taking-note/learning-from-the-feynman-technique-5373014ad230) are two inspirations for explaining important techniques intuitively. In this spirit, this document does not assume any previous Maths or Natural Language Processing (NLP) knowledge.
 
-Below are two R code conversions. The first is of a TF-IDF VSM example from this [tutorial](http://www.minerazzi.com/tutorials/term-vector-3.pdf) (page 6). It is logically followed by an R code conversion of the example in an [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). The LSA example the tutorial uses is from a canonical 1990 paper called, [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf).
+Below are two R code conversions. The first is of a TF-IDF VSM example from this [tutorial](http://www.minerazzi.com/tutorials/term-vector-3.pdf) (page 6). It is logically followed by an R code conversion of the example in an [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). The LSA example the tutorial uses is from the canonical [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper from 1990.
 
 # Where can I learn more about NLP?
 
