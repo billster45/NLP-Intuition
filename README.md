@@ -2742,6 +2742,7 @@ minors
 </tr>
 </tbody>
 </table>
+
 We "decompose" the above matrix in Table 1 into three other matrices using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html). This R function implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). The transformation, *"can be [intuitively interpreted](https://en.wikipedia.org/wiki/Singular_value_decomposition#Intuitive_interpretations) as a composition of three geometrical transformations: a rotation or reflection, a scaling, and another rotation or reflection."* If we multiply together the three decomposed matrices this exactly re-create the original matrix.
 
 Table 2 is the result of decomposing Table 1 using SVD into U (the orthogonal matrix), D (the diagonal matrix), and V' (the transposed orthogonal matrix). *(Note if you compare Table 2 to the example in [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) page 406, some of the signs are different. The reason for this ambiguity is explained [here](https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf).)*
@@ -3653,6 +3654,7 @@ Table 2: U orthogonal matrix, D diagonal matrix, V' transposed orthogoanl matrix
 </tr>
 </tbody>
 </table>
+
 To demonstrate that the three matrices U, D and V' above are a decomposition of the first, when multiplied together the result in Table 3 is the same as our original matrix in Table 1.
 
 ``` r
