@@ -1,5 +1,5 @@
 ---
-title: "R Code Intuitive Explanations of: Term Frequency - Inverse Document Frequency, Vector Space Model (TF-IDF VSM), Latent Semantic Analysis (LSA), and context word embeddings (e.g. word2vec)"
+title: "Intuitive Explanations of TF-IDF VSM, LSA, and context word embeddings in R code"
 output:
   github_document:
     toc: true
@@ -285,11 +285,11 @@ tdm <- base::t(as.matrix(mydfm))
 kable_table(tdm, "Table 1: The Term Document Matrix")
 ```
 
-We "decompose" the above matrix in Table 1 into three other matrices using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html). This R function implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). The tansformation, _"can be [intuitively interpreted](https://en.wikipedia.org/wiki/Singular_value_decomposition#Intuitive_interpretations) as a composition of three geometrical transformations: a rotation or reflection, a scaling, and another rotation or reflection."_ If we multiply together the three decomposed matricies this exactly re-create the orignal matrix. 
+We "decompose" the above matrix in Table 1 into three other matrices using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html). This R function implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). The transformation, *"can be [intuitively interpreted](https://en.wikipedia.org/wiki/Singular_value_decomposition#Intuitive_interpretations) as a composition of three geometrical transformations: a rotation or reflection, a scaling, and another rotation or reflection."* If we multiply together the three decomposed matrices this exactly re-create the original matrix.
 
-Table 2 is the result of decomposing Table 1 using SVD into U (the orthogonal matrix), D (the diagonal matrix), and V' (the transposed orthogoanl matrix).
-_(Note if you compare Table 2 to the example in [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) page 406, some of the signs are different. The reason for this ambiguity is explained [here](https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf).)
-_
+Table 2 is the result of decomposing Table 1 using SVD into U (the orthogonal matrix), D (the diagonal matrix), and V' (the transposed orthogonal matrix). 
+*(Note if you compare Table 2 to the example in [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) page 406, some of the signs are different. The reason for this ambiguity is explained [here](https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf).)*
+
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
 s <- base::svd(tdm)
 
@@ -299,7 +299,8 @@ v <- round(base::t(s$v),2) # transpose the matrix (swap rows with columns)
 
 knitr::kable(list(u,d,v), caption = "Table 2: U orthogonal matrix, D diagonal matrix, V' transposed orthogoanl matrix")
 ```
-To demonstrate that the three martrices U D and V' above are a decomposition of the first, when mutlitplied together the result in Table 3 is the same as our original matrxi in Table 1.
+
+To demonstrate that the three matrices U, D and V' above are a decomposition of the first, when multiplied together the result in Table 3 is the same as our original matrix in Table 1.
 
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
 reconstruct <- round(u %*% d %*% v,0)

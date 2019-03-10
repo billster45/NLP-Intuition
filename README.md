@@ -1,4 +1,4 @@
-R Code Intuitive Explanations of: Term Frequency - Inverse Document Frequency, Vector Space Model (TF-IDF VSM), Latent Semantic Analysis (LSA), and context word embeddings (e.g. word2vec)
+Intuitive Explanations of TF-IDF VSM, LSA, and context word embeddings in R code
 ================
 
 -   [Summary](#summary)
@@ -961,7 +961,7 @@ kable_table(joined, "Table 5: Weight word frequecies with the IDF value for each
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 5: Weight word frequencies with the IDF value for each word
+Table 5: Weight word frequecies with the IDF value for each word
 </caption>
 <thead>
 <tr>
@@ -1531,11 +1531,11 @@ gold silver truck
 Unit vectors to compare word similarity regardless of frequency
 ---------------------------------------------------------------
 
-Another way to calculate the cosine of the angle is to [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector into a "unit vector", then take the "dot product" of those vectors. Normalising a vector simply means converting the vector to a length of 1 by dividing each value by the vector length. We calculate length by taking the square root of the sum of all squared values in each vector.
+Another way to calculate the cosine of the angle is to [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector into a "unit vector".
 
 The reason for normalising is well explained by [Dan Jurafsky](https://web.stanford.edu/~jurafsky/slp3/6.pdf) page (11), *"The dot product is higher if a vector is longer, with higher values in each dimension. More frequent words have longer vectors, since they tend to co-occur with more words and have higher co-occurrence values with each of them. The raw dot product thus will be higher for frequent words. But this is a problem; we’d like a similarity metric that tells us how similar two words are regardless of their frequency."*
 
-The normalised columns (or unit vectors) can be seen below in Table 6 as qhat, d1hat, d2hat, d3hat. 
+They normalised columns (or unit vectors) can be seen below in Table 6 as qhat, d1hat, d2hat, d3hat. Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate length by taking the square root of the sum of all squared values in each vector.
 
 ``` r
 unit_vector <- function(vec) {
@@ -1555,7 +1555,7 @@ kable_table(joined, "Table 6: Converting weighted word frequenies into unit vect
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 6: Converting weighted word frequencies into unit vectors
+Table 6: Converting weighted word frequenies into unit vectors
 </caption>
 <thead>
 <tr>
@@ -2742,11 +2742,9 @@ minors
 </tr>
 </tbody>
 </table>
-
 We "decompose" the above matrix in Table 1 into three other matrices using the R base function [svd()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/svd.html). This R function implements [Singular Value Decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition). The transformation, *"can be [intuitively interpreted](https://en.wikipedia.org/wiki/Singular_value_decomposition#Intuitive_interpretations) as a composition of three geometrical transformations: a rotation or reflection, a scaling, and another rotation or reflection."* If we multiply together the three decomposed matrices this exactly re-create the original matrix.
 
-Table 2 is the result of decomposing Table 1 using SVD into U (the orthogonal matrix), D (the diagonal matrix), and V' (the transposed orthogonal matrix). 
-*(Note if you compare Table 2 to the example in [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) page 406, some of the signs are different. The reason for this ambiguity is explained [here](https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf).)*
+Table 2 is the result of decomposing Table 1 using SVD into U (the orthogonal matrix), D (the diagonal matrix), and V' (the transposed orthogonal matrix). *(Note if you compare Table 2 to the example in [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) page 406, some of the signs are different. The reason for this ambiguity is explained [here](https://prod-ng.sandia.gov/techlib-noauth/access-control.cgi/2007/076422.pdf).)*
 
 ``` r
 s <- base::svd(tdm)
@@ -2760,7 +2758,7 @@ knitr::kable(list(u,d,v), caption = "Table 2: U orthogonal matrix, D diagonal ma
 
 <table class="kable_wrapper">
 <caption>
-Table 2: U orthogonal matrix, D diagonal matrix, V' transposed orthogonal matrix
+Table 2: U orthogonal matrix, D diagonal matrix, V' transposed orthogoanl matrix
 </caption>
 <tbody>
 <tr>
@@ -3655,7 +3653,6 @@ Table 2: U orthogonal matrix, D diagonal matrix, V' transposed orthogonal matrix
 </tr>
 </tbody>
 </table>
-
 To demonstrate that the three matrices U, D and V' above are a decomposition of the first, when multiplied together the result in Table 3 is the same as our original matrix in Table 1.
 
 ``` r
@@ -3669,7 +3666,7 @@ kable_table(reconstruct, "Table 3: Reconstructing our orginal matrix")
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 3: Reconstructing our original matrix
+Table 3: Reconstructing our orginal matrix
 </caption>
 <thead>
 <tr>
@@ -4106,7 +4103,7 @@ knitr::kable(list(u_red,d_red,v_red), caption = "Table 4: U, D and V' after sele
 
 <table class="kable_wrapper">
 <caption>
-Table 4: U, D and V' after selecting first two dimensions
+Table 4: U, D and V' after selecting first two dimesions
 </caption>
 <tbody>
 <tr>
@@ -4301,7 +4298,7 @@ Table 4: U, D and V' after selecting first two dimensions
 </tr>
 </tbody>
 </table>
-When we multiply the three reduced matrices in Table 4 this creates Table 5 below. You can see that while the word "trees" is not in the title of m4 ("Graph minors: A survey"), "trees" does now have some weight (0.66, Table 5). This is because "trees" is in a document that is very similar (m3 = "Graph minors IV: Widths of trees and well-quasi-ordering"). Also, the original value of 1.00 for "survey" in Table 1, which appeared once in m4, has been replaced by 0.42.
+When we multiply the three reduced matricies in Table 4 this creates Table 5 below. You can see thatwhile the word "trees" is not in the title of m4 ("Graph minors: A survey"), "trees" does now have some weight (0.66, Table 5). This is because "trees" is in a document that is very similar (m3 = "Graph minors IV: Widths of trees and well-quasi-ordering"). Also, the original value of 1.00 for "survey" in Table 1, which appeared once in m4, has been replaced by 0.42.
 
 Describing this intuitively, *"in constructing the reduced dimensional representation, SVD, with only values along two orthogonal dimensions to go on, has to estimate what words actually appear in each context by using only the information it has extracted. It does that by saying: This text segment is best described as having so much of abstract concept one and so much of abstract concept two, and this word has so much of concept one and so much of concept two, and combining those two pieces of information (by vector arithmetic), my best guess is that word X actually appeared 0.6 times in context Y."* pages 12 & 14 of the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). \_
 
@@ -4316,7 +4313,7 @@ kable_table(final, "Table 5: Multiplication of reduced matriices U, D and V'")
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 5: Multiplication of reduced matrices U, D and V'
+Table 5: Multiplication of reduced matriices U, D and V'
 </caption>
 <thead>
 <tr>
@@ -4738,7 +4735,7 @@ minors
 </tr>
 </tbody>
 </table>
-SVD can be useful when we query this matrix, (again using cosine similarity as we did previously for TF-IDF VSM). Now that the title m4 has take on some information from the very similar title m3 it will rank higher in a cosine similarity query result than if we had not reduced the dimensionality with SVD. However, you should judge for yourself if an LSA transformation prior to cosine similarity as improved document search or document similarity. The usefulness will vary between corpora (collections of text documents).
+SVD can be useful when we query this matrix, (again using cosine similarity as we did prevsiously for TF-IDF VSM). Now that the title m4 has take on some information from the very similar title m3 it will rank higer in a cosine similarity query result than if we had not reduced the dimensionality with SVD. However, you should judge for yourself if an LSA transformation prior to cosine similarity as improved document search or document similairity. The usefulness will vary between corpora (collections of text documents).
 
 Word context - going beyond count based word embeddings - Word2vec
 ==================================================================
