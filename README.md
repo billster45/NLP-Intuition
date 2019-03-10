@@ -1531,11 +1531,11 @@ gold silver truck
 Unit vectors to compare word similarity regardless of frequency
 ---------------------------------------------------------------
 
-Another way to calculate the cosine of the angle is to [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector into a "unit vector".
+Another way to calculate the cosine of the angle is to [normalise](https://moj-analytical-services.github.io/NLP-guidance/Glossary.html#norm) each vector into a "unit vector", then take the "dot product" of those vectors. Normalising a vector simply means converting the vector to a length of 1 by dividing each value by the vector length. We calculate length by taking the square root of the sum of all squared values in each vector.
 
 The reason for normalising is well explained by [Dan Jurafsky](https://web.stanford.edu/~jurafsky/slp3/6.pdf) page (11), *"The dot product is higher if a vector is longer, with higher values in each dimension. More frequent words have longer vectors, since they tend to co-occur with more words and have higher co-occurrence values with each of them. The raw dot product thus will be higher for frequent words. But this is a problem; we’d like a similarity metric that tells us how similar two words are regardless of their frequency."*
 
-They normalised columns (or unit vectors) can be seen below in Table 6 as qhat, d1hat, d2hat, d3hat. Normalising a vector means converting the vector to a length of 1 by dividing each value by the vector length. We calculate length by taking the square root of the sum of all squared values in each vector.
+The normalised columns (or unit vectors) can be seen below in Table 6 as qhat, d1hat, d2hat, d3hat. 
 
 ``` r
 unit_vector <- function(vec) {
