@@ -1,4 +1,4 @@
-Intuitive explanations of TF-IDF VSM, LSA, and context word embeddings in R code
+Intuitive explanations of key NLP Techniques using R code
 ================
 
 -   [Summary](#summary)
@@ -18,30 +18,38 @@ Intuitive explanations of TF-IDF VSM, LSA, and context word embeddings in R code
 Summary
 =======
 
-1.  We learn what the TF-IDF VSM and then LSA are intuitively. TF-IDF VSM used to find which text documents are similar to each other in rank order. The highest ranking documents tend to have matching words that are **rarely** used across all documents.
+1.  We learn what the TF-IDF VSM and then LSA are intuitively. The TF-IDF VSM  can find which text documents are similar to each other in rank order. The highest ranking documents tend to have matching words that are **rarely** used across all documents.
 2.  TF-IDF VSM can sound intimidating because of the the technical language used. "Term" means word, "Frequency" means count. The "Vector Space Model" is the part of the calculation that finds the angle between lists of matching word weights. This angle measures the similarity of documents.
 3.  A very simple example is explained. It assumes no Maths or Natural Language Processing (NLP) knowledge. We use basic maths and simple cosine trigonometry.
 4.  TF-IDF VSM is calculated as follows:
     1.  **Term Frequency (TF):** We first count how often each word is used within each document.
     2.  **Inverse Document Frequency (IDF):** We count the number of documents that contain each word. Inverse means dividing the total number of documents by the number of documents each word occurs in. The division gives common words a low IDF value, and rare words a high IDF value.
     3.  **TF-IDF:** For each word in each document, we multiply the word count in that document by the log of the TF multiplied by the IDF. Taking the log dampens the importance of the most rare words that are not as important as their raw untransformed value would indicate.
-    4.  **Words embedded as vectors:** We call the lists of weights for each word in each document, vectors. When we line up the vectors for each document next to each other we call it a matrix. Putting words into such a matrix is a form of word embedding.
+    4.  **Words embedded as vectors:** We call the TF-IDF weights for each word in each document, vectors. When we line up the vectors for each document next to each other we call it a matrix. Representing words as weights in a matrix is called word embedding.
     5.  **Vector Spae Model (VSM):** We measure the similarity of each document vector against every other document vector one-by-one by measuring the angle between them. This is called the cosine similarity. We measure vector similarity by angle instead of distance to compensate for documents of varying lengths.
-5.  We can sometimes improve the detection of document similarity using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but, those words are found inside documents that are similar to them. This is done by manipulating the matrix of word counts using Singular Value Decomposition (SVD).
-6.  SVD is well worth learning intuitively too since it a fundamental technique behind many key Data Science tools such as data dimension reduction prior to Machine Learning, Principal Components Analysis (PCA) and solving linear equations.
+5.  We can sometimes improve the detection of document similarity using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA,  documents are given some of the information value from words **not** in the document at all. However, those words **are** found inside documents that are similar to them. This is done by manipulating the matrix of word counts using Singular Value Decomposition (SVD).
+6.  SVD is well worth learning intuitively too because it is a fundamental technique behind many key Data Science methods such as: data dimension reduction prior to Machine Learning, Principal Components Analysis (PCA), and solving linear equations.
 7.  TF-IDF VSM and SVD are called count based methods. Modern methods use the context of words such as Word2vec.
+8. The simple TF-IDF VSM could be accurate enough for your problem. Sometimes LSA or word2vec give significant improvement to justify their use. Compare simple to more complex methods objectively before deciding which to use.
 
 What is this document for?
 ==========================
 
-This document describes the TF-IDF VSM and LSA in plain English with simple examples so that you can understand it **intuitively**. A deeper intuitive understanding helps you move on to understand more complex NLP techniques such as Latent Semantic Analysis. Deeper understanding can also help you better identify where techniques are weak and strong. The [betterexplained](https://betterexplained.com/articles/adept-method/) website and the [Feynman Technique](https://medium.com/taking-note/learning-from-the-feynman-technique-5373014ad230) are two inspirations for explaining important techniques intuitively. In this spirit, this document does not assume any previous Maths or Natural Language Processing (NLP) knowledge.
+This document describes key NLP techniques like TF-IDF VSM, LSA and word2vecin plain English with simple working examples in R code you can run and adjust yourself. The aim is to help you build an **intuitive** deeper understanding of NLP. This will help you move on to understand more complex techniques, and realise that sometimes the simple technique works well enough. Deeper understanding will also help you identify where techniques are weak and strong. 
 
-Below are two R code conversions. The first is of a TF-IDF VSM example from this [tutorial](http://www.minerazzi.com/tutorials/term-vector-3.pdf) (page 6). It is logically followed by an R code conversion of the example in an [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). The LSA example the tutorial uses is from the canonical [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper from 1990.
+The [betterexplained](https://betterexplained.com/articles/adept-method/) website and the [Feynman Technique](https://medium.com/taking-note/learning-from-the-feynman-technique-5373014ad230) are two inspirations for explaining important techniques intuitively. In this spirit, this document does not assume any previous Maths or Natural Language Processing (NLP) knowledge.
+
+So far, I have created two R code conversions below of good NLP technique worked examples. The first is of a TF-IDF VSM example from this [tutorial](http://www.minerazzi.com/tutorials/term-vector-3.pdf) (page 6). It is logically followed by an R code conversion of the example in an [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). The LSA example the tutorial uses is from the canonical [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf) paper from 1990.
 
 Where can I learn more about NLP?
 =================================
 
-The calculations used in the code are not intended for use in a real project. For a real text mining project use a popular NLP package in R or Python, for example: - [tidytext](https://github.com/juliasilge/tidytext) - [quanteda](https://quanteda.io) - [text2vec](http://text2vec.org/index.html) - [scikit-learn](https://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html).
+The calculations used in the code are not intended for use in a real project. For a real text mining project use a popular NLP package in R or Python, for example: 
+
+-   [tidytext](https://github.com/juliasilge/tidytext) 
+-   [quanteda](https://quanteda.io) 
+-   [text2vec](http://text2vec.org/index.html) 
+-   [scikit-learn](https://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html).
 
 Also, the following are excellent NLP tutorials taking you from basic to advanced knowledge, mostly assuming no prior knowledge:
 
@@ -624,7 +632,7 @@ Calculate IDF for each Word across all documents
 
 The Inverse Document Frequency (IDF) value is a measure of the discriminatory power of each word globally across the collection of documents. The value is low for a word found in most documents, and high when it occurs in very few.
 
-To calculate the *I**D**F*<sub>*i*</sub>, for each word, divide the total number of documents *D* (in this example it is 3) by the number of documents each word occurs in, *D*/*d*<sub>*i*</sub>. The most frequent words that occur in every document will equal 1 (3/3 = 1) and the most rare words occurring in only one document have the highest value of 3 (3/1 = 3).
+To calculate the IDF, for each word, divide the total number of documents *D* (in this example it is 3) by the number of documents each word occurs in, *D*/*d*<sub>*i*</sub>. The most frequent words that occur in every document will equal 1 (3/3 = 1) and the most rare words occurring in only one document have the highest value of 3 (3/1 = 3).
 
 Table 4 is sorted by *I**D**F*<sub>*i*</sub> in descending order. *I**D**F*<sub>*i*</sub> is the log of *D*/*d*<sub>*i*</sub>. Rare words like "damaged" have the highest *I**D**F*<sub>*i*</sub> as they appear in only one document. While words in all of the documents do not offer any discrimination. They have an *I**D**F*<sub>*i*</sub> value of zero (e.g. "of" = log(3/3) = 0). Low *I**D**F*<sub>*i*</sub> value words are often removed in the data preparation stage of text mining. These very common words are known as "stop words".
 
@@ -928,14 +936,14 @@ of
 
 Intuitively, the importance of a word in document will not increase proportionally with frequency. Therefore, a simple method to reduce the importance of rare words is to take the logarithm of the ratio of *D*/*d*<sub>*i*</sub>. This is particularly important for rare words used in only one document. They will have an IDF value the same as the total number of documents which can be in the thousands or more. A further exploration of the theory of IDF and how it relates to Information theory is described in detail [here](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.97.7340&rep=rep1&type=pdf)
 
-Typically, log of base-10 is used for TF-IDF. Base-10 allows faster mental calculation. For example,log(1)=0, log(10)=1, log(100)=2, etc. It is also simple to transform *I**D**F*<sub>*i*</sub> back to the original ratio by raising 10 by that value. For example, the *I**D**F*<sub>*i*</sub> value for "damaged" can be returned to the raw *D*/*d*<sub>*i*</sub> ratio by raising 10 to the power of 0.4771213, (10<sup>0.4771213</sup> = 3).
+Typically, log of base-10 is used. Base-10 allows faster mental calculation. For example,log(1)=0, log(10)=1, log(100)=2, etc. It is also simple to transform *I**D**F*<sub>*i*</sub> back to the original ratio by raising 10 by that value. For example, the *I**D**F*<sub>*i*</sub> value for "damaged" can be returned to the raw *D*/*d*<sub>*i*</sub> ratio by raising 10 to the power of 0.4771213, (10<sup>0.4771213</sup> = 3).
 
 Calculate the weight for each word in each document
 ---------------------------------------------------
 
-We now search the collection of three documents with our search terms by adding the column called "query". For each word, we multiply its *I**D**F*<sub>*i*</sub> value by the Term Frequency, which is simply the number of times the word appears in both the query and in each document. This weights the word counts in each document and the query by the discriminatory information each word has been found to provide across all the documents globally.
+We now search the collection of three documents with our search terms by adding the column called "query" to Table 5. For each word, we multiply its *I**D**F*<sub>*i*</sub> value by the Term Frequency, which is simply the number of times the word appears in both the query and in each document. This weights the word counts in each document and the query by the discriminatory information each word has been found to provide across all the documents globally.
 
-Look again at Table 1. We can see "silver" is rare globally among all the documents. It is only used in document 2. While"silver" is a common word locally as it is used twice in document 2. No other word is used twice in the same document. Looking at the weights calculated for "silver", the importance of the word "silver" is reflected in the high weight calculated. Silver appears in *d*<sub>2</sub> two times, and when multiplied with its *I**D**F*<sub>*i*</sub> it has the value 0.954 shown in the column *w*<sub>*i*</sub>2. This is the highest weight in the whole matrix.
+Look again at Table 1. We can see "silver" is rare globally among all the documents. It is only used in document 2. And also, "silver" is a common word locally (as it is used twice in document 2). No other word is used twice in the same document. Look at the weights calculated for "silver" in Table 5. The importance of the word "silver" is reflected in the highest weight calculated in the whole matrix. It's because "silver" appears in *d*<sub>2</sub> two times, and when multiplied with its *I**D**F*<sub>*i*</sub> value gives it the weight 0.954 shown in the column *w*<sub>*i*</sub>2.
 
 ``` r
 query_seperate_words <- query %>%
@@ -1433,9 +1441,11 @@ To compensate for the effect of [document length](https://cmry.github.io/notes/e
 
 To find the angle between the vectors we multiply each TF-IDF weighted word frequency in the query by the IDF weighted word frequency for each document, then sum all the values. This multiplication is also called the dot product. The dot product is the sum of the products of each component of the two vectors.
 
-This [example](https://www.varsitytutors.com/precalculus-help/find-the-measure-of-an-angle-between-two-vectors), shows that the dot product equals the product of the length of the two vectors and the [cosine of the angle](https://www.mathopenref.com/cosine.html), a.b = |a|.|b|.*c**o**s**θ* That is to say, the dot product of two vectors will be equal to the cosine of the angle between the vectors, times the lengths of each of the vectors.
+These [examples](https://www.varsitytutors.com/precalculus-help/find-the-measure-of-an-angle-between-two-vectors), show that the dot product equals the product of the length of the two vectors and the [cosine of the angle](https://www.mathopenref.com/cosine.html), a.b = |a|.|b|.*c**o**s**θ* 
 
-The cosine similarity value shows that document 2 is the closest match to the search terms "gold silver truck". We can understand why intuitively if we consider that document 2 contains two of the search terms ("silver" and "truck"). Also, document 2 is the only document to contain the rare word "silver".
+That is to say, the dot product of two vectors will be equal to the cosine of the angle between the vectors, times the lengths of each of the vectors.
+
+In Table 7, the cosine similarity value shows that document 2 is the closest match to the search terms "gold silver truck". We can understand why intuitively if we consider that document 2 contains two of the search terms ("silver" and "truck"). Also, document 2 is the only document to contain the globally rare word "silver".
 
 ``` r
 vector_length <- function(vec) {
@@ -2163,7 +2173,7 @@ of
 </tr>
 </tbody>
 </table>
-Once normalised, the dot product of two vectors computes the cosine of the angle between them. This simple dot product calculation of normalised vectors in table 6 creates Table 7 below. We can see that documents 1 and 2 are most similar to each other with a value of 0.24 (Table 7).
+Once normalised, the dot product of two vectors computes the cosine of the angle between them. This simple dot product calculation of normalised vectors in Table 6 creates Table 7 below. We can see that documents 1 and 3 are most similar to each other with a value of 0.25 (Table 7).
 
 ``` r
 joined_matrix <- as.matrix(joined[, 13:16])
@@ -2271,7 +2281,7 @@ d3
 Beyond TF-IDF - Latent Semantic Analysis (LSA)
 ==============================================
 
-Representing documents as vectors is called embedding. We can sometimes "improve" how document words embedded in a matrix can find similar documents using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but those words are found inside documents that are similar to them.
+Representing documents as vectors is called embedding. We can sometimes improve how document words embedded in a matrix can find similar documents using Latent Semantic Analysis (LSA). "Latent" means hidden, "Semantic" is meaning (i.e. hidden meaning analysis). In LSA, a document is given some of the information value from words **not** inside the document, but those words are found inside documents that are similar to them.
 
 LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intuitively too as it a fundamental technique behind many key Data Science tools:
 
@@ -2279,7 +2289,7 @@ LSA uses Singular Value Decomposition (SVD). It is well worth learning SVD intui
 -   [Image compression](https://towardsdatascience.com/singular-value-decomposition-with-example-in-r-948c3111aa43)
 -   [Solving](http://www.math.usu.edu/~corcoran/classes/old/07spring6550/examples/svd.pdf) linear equations
 
-Below we convert to R a clearly explained example from an [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). It uses the example from [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf).
+Below we convert to R code a clearly explained example from an [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). It uses the example from [Indexing by Latent Semantic Analysis](http://www.cs.bham.ac.uk/~pxt/IDA/lsa_ind.pdf).
 
 The example takes the following nine titles, five about human computer interaction (c1 to c5), and four about mathematical graph theory (m1 to m5).
 
@@ -4304,7 +4314,7 @@ Table 4: U, D and V' after selecting first two dimesions
 
 When we multiply the three reduced matricies in Table 4 this creates Table 5 below. You can see that while the word "trees" is not in the title of m4 ("Graph minors: A survey"), "trees" does now have some weight (0.66, Table 5). This is because "trees" is in a document that is very similar (m3 = "Graph minors IV: Widths of trees and well-quasi-ordering"). Also, the original value of 1.00 for "survey" in Table 1, which appeared once in m4, has been replaced by 0.42.
 
-Describing this intuitively, *"in constructing the reduced dimensional representation, SVD, with only values along two orthogonal dimensions to go on, has to estimate what words actually appear in each context by using only the information it has extracted. It does that by saying: This text segment is best described as having so much of abstract concept one and so much of abstract concept two, and this word has so much of concept one and so much of concept two, and combining those two pieces of information (by vector arithmetic), my best guess is that word X actually appeared 0.6 times in context Y."* pages 12 & 14 of the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf). \_
+Describing this intuitively, *"in constructing the reduced dimensional representation, SVD, with only values along two orthogonal dimensions to go on, has to estimate what words actually appear in each context by using only the information it has extracted. It does that by saying: This text segment is best described as having so much of abstract concept one and so much of abstract concept two, and this word has so much of concept one and so much of concept two, and combining those two pieces of information (by vector arithmetic), my best guess is that word X actually appeared 0.6 times in context Y."* pages 12 & 14 of the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf).
 
 ``` r
 final <- round(u_red %*% d_red %*% v_red,2)
