@@ -35,7 +35,7 @@ Summary
 What is this document for?
 ==========================
 
-This document describes key NLP techniques like TF-IDF VSM, LSA and word2vecin plain English with simple working examples in R code you can run and adjust yourself. The aim is to help you build an **intuitive** deeper understanding of NLP. This will help you move on to understand more complex techniques, and realise that sometimes the simple technique works well enough. Deeper understanding will also help you identify where techniques are weak and strong. 
+This document describes key NLP techniques like TF-IDF VSM, LSA and word2vec in plain English with simple working examples in R code you can run and adjust yourself. The aim is to help you build an **intuitive** deeper understanding of NLP. This will help you move on to understand more complex techniques, and realise that sometimes the simple technique works well enough. Deeper understanding will also help you identify where techniques are weak and strong. 
 
 The [betterexplained](https://betterexplained.com/articles/adept-method/) website, the [Feynman Technique](https://medium.com/taking-note/learning-from-the-feynman-technique-5373014ad230), and David Robinson's explanations and simple R examples for [empirical Bayesian methods](http://varianceexplained.org/r/simulation-bayes-baseball/) are all inspirations for explaining important techniques intuitively. In the spirit of those teachers, this document does not assume any previous Maths or Natural Language Processing (NLP) knowledge.
 
@@ -970,7 +970,7 @@ kable_table(joined, "Table 5: Weight word frequecies with the IDF value for each
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 5: Weight word frequecies with the IDF value for each word
+Table 5: Weight word frequencies with the IDF value for each word
 </caption>
 <thead>
 <tr>
@@ -1566,7 +1566,7 @@ kable_table(joined, "Table 6: Converting weighted word frequenies into unit vect
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 6: Converting weighted word frequenies into unit vectors
+Table 6: Converting weighted word frequencies into unit vectors
 </caption>
 <thead>
 <tr>
@@ -2770,7 +2770,7 @@ knitr::kable(list(u,d,v), caption = "Table 2: U orthogonal matrix, D diagonal ma
 
 <table class="kable_wrapper">
 <caption>
-Table 2: U orthogonal matrix, D diagonal matrix, V' transposed orthogoanl matrix
+Table 2: U orthogonal matrix, D diagonal matrix, V' transposed orthogonal matrix
 </caption>
 <tbody>
 <tr>
@@ -3679,7 +3679,7 @@ kable_table(reconstruct, "Table 3: Reconstructing our orginal matrix")
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 3: Reconstructing our orginal matrix
+Table 3: Reconstructing our original matrix
 </caption>
 <thead>
 <tr>
@@ -4116,7 +4116,7 @@ knitr::kable(list(u_red,d_red,v_red), caption = "Table 4: U, D and V' after sele
 
 <table class="kable_wrapper">
 <caption>
-Table 4: U, D and V' after selecting first two dimesions
+Table 4: U, D and V' after selecting first two dimensions
 </caption>
 <tbody>
 <tr>
@@ -4312,7 +4312,7 @@ Table 4: U, D and V' after selecting first two dimesions
 </tbody>
 </table>
 
-When we multiply the three reduced matricies in Table 4 this creates Table 5 below. You can see that while the word "trees" is not in the title of m4 ("Graph minors: A survey"), "trees" does now have some weight (0.66, Table 5). This is because "trees" is in a document that is very similar (m3 = "Graph minors IV: Widths of trees and well-quasi-ordering"). Also, the original value of 1.00 for "survey" in Table 1, which appeared once in m4, has been replaced by 0.42.
+When we multiply the three reduced matrices in Table 4 this creates Table 5 below. You can see that while the word "trees" is not in the title of m4 ("Graph minors: A survey"), "trees" does now have some weight (0.66, Table 5). This is because "trees" is in a document that is very similar (m3 = "Graph minors IV: Widths of trees and well-quasi-ordering"). Also, the original value of 1.00 for "survey" in Table 1, which appeared once in m4, has been replaced by 0.42.
 
 Describing this intuitively, *"in constructing the reduced dimensional representation, SVD, with only values along two orthogonal dimensions to go on, has to estimate what words actually appear in each context by using only the information it has extracted. It does that by saying: This text segment is best described as having so much of abstract concept one and so much of abstract concept two, and this word has so much of concept one and so much of concept two, and combining those two pieces of information (by vector arithmetic), my best guess is that word X actually appeared 0.6 times in context Y."* pages 12 & 14 of the [Introduction to Latent Semantic Analysis](http://lsa.colorado.edu/papers/dp1.LSAintro.pdf).
 
@@ -4327,7 +4327,7 @@ kable_table(final, "Table 5: Multiplication of reduced matriices U, D and V'")
 
 <table class="table table-striped table-condensed" style="width: auto !important; ">
 <caption>
-Table 5: Multiplication of reduced matriices U, D and V'
+Table 5: Multiplication of reduced matrices U, D and V'
 </caption>
 <thead>
 <tr>
@@ -4750,7 +4750,7 @@ minors
 </tbody>
 </table>
 
-Reducing the dimensionality of a Term Document Matrix in this way with a "truncated" SVD of the first two columns of the three decomposed matricies may improve our ability to search documents when using cosine similarity (as we did before with the TF-IDF VSM). However, you should judge for yourself if this transformation gives better performance by comparing your search results with and without the trasnformation. The usefulness of will vary between corpora (collections of text documents).
+Reducing the dimensionality of a Term Document Matrix in this way with a "truncated" SVD of the first two columns of the three decomposed matrices may improve our ability to search documents when using cosine similarity (as we did before with the TF-IDF VSM). However, you should judge for yourself if this transformation gives better performance by comparing your search results with and without the transformation. The usefulness of will vary between corpora (collections of text documents).
 
 Word context - going beyond count based word embeddings - Word2vec
 ==================================================================
@@ -4760,4 +4760,4 @@ TF-IDF VSM and LSA have been called [count based methods](http://clic.cimec.unit
 Naive Bayes and Sentiment Classification
 ========================================
 
-A future addition in R code will include the simple count based naive bayes classifer example on page 6 of [Chapter 4  Naive Bayes and Sentiment Classification](https://web.stanford.edu/~jurafsky/slp3/4.pdf) from the [Speech and Language processing](https://web.stanford.edu/~jurafsky/slp3/) book.
+A future addition in R code will include the simple count based naive Bayes classifier example on page 6 of [Chapter 4  Naive Bayes and Sentiment Classification](https://web.stanford.edu/~jurafsky/slp3/4.pdf) from the [Speech and Language processing](https://web.stanford.edu/~jurafsky/slp3/) book.
